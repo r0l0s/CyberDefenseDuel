@@ -24,21 +24,19 @@ public class Controller {
 				 
 				 //Attack controls
 				 if (event.getCode() == KeyCode.Q) {
-					//defence_type  = 0;					 
-					System.out.println("Firewall "+0); 
-					shoot = true;
+					System.out.println("Antivirus"+1);		 
+					shoot();
+				 }
+				 if (event.getCode() == KeyCode.W) {				 
+					System.out.println("Antivirus"+2);
+					shoot();
+				 }
 
-				 }/*
-				 if (event.getCode() == KeyCode.W) {
-					 defence_type  = 1;					 
-					 System.out.println("Antivirus"+defence_type);
+				 if (event.getCode() == KeyCode.E) {		 
+					System.out.println("Crypto shield"+3); 
+					shoot();
 
 				 }
-				 if (event.getCode() == KeyCode.E) {
-					 defence_type  = 2;					 
-					 System.out.println("Crypto shield"+defence_type); 
-
-				 }*/
 			}
 			
 		}));
@@ -49,6 +47,13 @@ public class Controller {
 				shoot = false;
 			}
 		}));
+	}
+
+	private void shoot(){
+		System.out.println("Firewall "+0); 
+		if(shoot==false){
+			shoot = true;
+		}
 	}
 
 	public boolean get_shoot(){

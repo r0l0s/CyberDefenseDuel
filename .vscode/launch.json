@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "type": "java",
+            "name": "testStrucs",
+            "request": "launch",
+            "mainClass": "estruc_datos.testStrucs",
+            "projectName": "CyberDefenseDuel_e2a031b2"
+        },
         {
             "type": "java",
             "name": "Play game",

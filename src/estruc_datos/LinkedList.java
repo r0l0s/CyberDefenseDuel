@@ -20,6 +20,9 @@ public class LinkedList<Object> extends List<Object> {
 	//Insert methods
 	public void insert(Object data) {
 		Node<Object> node = new Node<>(data);
+		if (getSize()==0){
+			this.first = node;
+		}
 		this.last.setNext(node);
 		this.last = node;
 		this.size++;
