@@ -39,17 +39,43 @@ public class Main extends Application {
 			
 			//Animator for Game loop  -> Cambiar esto que está hecho con ChatGPT esto lo podría tener el mannager Btw
 			AnimationTimer gameLoop = new AnimationTimer() {
-			    @Override
+				private long lastTime = 0;
+				private double timerAcumulado = 0;
+				
+				@Override
 			    public void handle(long now) {
+					//Time configuration
+					if (lastTime == 0) {
+						lastTime = now;
+						return;
+					}
+					double deltaTime = (now - lastTime) / 1_000_000_000.0;
+					lastTime = now;
+					timerAcumulado += deltaTime;
+
 			        // 1. Capturar Input (Teclas, ratón)
 			        // 2. Actualizar lógica (Movimiento, Colisiones)
 			        // 3. Renderizar (JavaFX lo hace automático al mover nodos)
+					
 			    	player.move(inputs.dir);
-			    	if(inputs.shoot) {
+					if (root.getChildren().contains(player.free_bullets.top().get_colider())){
+						player.free_bullets.top().move();
+					}
+
+			    	if(inputs.get_shoot()) {
 			    		System.out.println("Jugador disparó");
+						root.getChildren().add(player.free_bullets.top().get_colider());
 			    	}
-			    }
-			};
+					
+					if(timerAcumulado<5.0){
+						if (inputs.get_shoot()){
+							inputs.set_shoot(false);
+						}
+						timerAcumulado = 0;
+					}
+
+			    
+			}};
 			
 			//Creating the game scenario:
 			Scene scene = new Scene(root,400,400);

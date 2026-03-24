@@ -45,7 +45,7 @@ public class Player extends GameObject{
 	public int get_type() {
 		return this.defence_type;
 	}
-	
+
 	//Change the position of the player on the X axis.
 	public void move(int dir) {
 		double newX = this.colider.getTranslateX() + (dir * this.vel);

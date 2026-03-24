@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 
 public class Controller {
 	public int dir;
-	public boolean shoot;
+	private boolean shoot = false;
 
 	public Controller(BorderPane root) {
 		root.setOnKeyPressed((new EventHandler<KeyEvent>() { 
@@ -24,9 +24,9 @@ public class Controller {
 				 
 				 //Attack controls
 				 if (event.getCode() == KeyCode.Q) {
-					 //defence_type  = 0;					 
-					 System.out.println("Firewall "+0); 
-					 shoot = true;
+					//defence_type  = 0;					 
+					System.out.println("Firewall "+0); 
+					shoot = true;
 
 				 }/*
 				 if (event.getCode() == KeyCode.W) {
@@ -49,6 +49,14 @@ public class Controller {
 				shoot = false;
 			}
 		}));
+	}
+
+	public boolean get_shoot(){
+		return this.shoot;
+	}
+	
+	public void set_shoot(boolean op){
+		this.shoot = op;
 	}
 
 }
