@@ -3,6 +3,7 @@ package Game;
 import estruc_datos.LinkedList;
 
 import estruc_datos.StackList;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Player extends GameObject{
@@ -19,7 +20,6 @@ public class Player extends GameObject{
 	private LinkedList<Bullet> used_bullets;
 	//Type of shot bullet 
 	private int defence_type = 0;
-	protected Object get_usedBullets;
 
 	//Constructor
 	private Player(float x, float y) {
@@ -28,14 +28,15 @@ public class Player extends GameObject{
 		this.colider.setX(x);
 		this.x = x;
 		this.colider.setY(y);
-		this.y = y;//(float) (y+ (this.colider.getWidth()/2));
+		this.y = y;
 		this.vel =  4;
+		//Misc
+		this.health = 100;
 		//Creating the available bullets.
 		this.free_bullets = new StackList<Bullet>(new Bullet(this.x,this.y,-1));
 		for(int i=0;i<9;i++) {
 			this.free_bullets.push(new Bullet(this.x,this.y,-1));
 		}
-		
 	}
 	
 	//Singleton - Returns instance of Player
@@ -53,6 +54,10 @@ public class Player extends GameObject{
 	
 	public int get_type() {
 		return this.defence_type;
+	}
+
+	public void set_type(int type){
+		this.defence_type  = type;
 	}
 
 	public LinkedList<Bullet> get_usedBullets(){
@@ -78,9 +83,15 @@ public class Player extends GameObject{
 		}else{
 			this.used_bullets.insert(bullet);
 		}
+
 		bullet.setPosition(colider.getLayoutX() + colider.getTranslateX(), this.get_colider().getLayoutY());
+		bullet.setType(this.defence_type);
 	}
 	
+	public void damage(int value){
+		this.health -= value;
+		System.out.print(this.health);
+	}
 	
 }
 

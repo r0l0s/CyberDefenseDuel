@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 public class Controller {
 	public int dir;
 	private boolean shoot = false;
+	private int globalType = 0;
 
 	public Controller(BorderPane root) {
 		root.setOnKeyPressed((new EventHandler<KeyEvent>() { 
@@ -24,16 +25,19 @@ public class Controller {
 				 
 				 //Attack controls
 				 if (event.getCode() == KeyCode.Q) {
-					System.out.println("Antivirus"+1);		 
+					globalType = 0;
+					System.out.println("Firewall "+globalType); 	 
 					shoot();
 				 }
-				 if (event.getCode() == KeyCode.W) {				 
-					System.out.println("Antivirus"+2);
+				 if (event.getCode() == KeyCode.W) {		
+					globalType = 1;		 
+					System.out.println("Antivirus"+globalType);
 					shoot();
 				 }
 
-				 if (event.getCode() == KeyCode.E) {		 
-					System.out.println("Crypto shield"+3); 
+				 if (event.getCode() == KeyCode.E) {	
+					globalType = 2;	 
+					System.out.println("Crypto shield"+globalType); 
 					shoot();
 
 				 }
@@ -50,7 +54,6 @@ public class Controller {
 	}
 
 	private void shoot(){
-		System.out.println("Firewall "+0); 
 		if(shoot==false){
 			shoot = true;
 		}
@@ -62,6 +65,10 @@ public class Controller {
 	
 	public void set_shoot(boolean op){
 		this.shoot = op;
+	}
+
+	public int get_type(){
+		return this.globalType;
 	}
 
 }

@@ -7,8 +7,7 @@ public class Bullet extends GameObject{
 	private int type;
 	private int vel = 4;
 	private int dir;
-	//Eliminar
-	public String text  = "aAA";
+	private Color[] bullet_color = {Color.RED,Color.BLUE,Color.YELLOW};; //Provisional
 
 	//Constructor
 	public Bullet(float x, float y, int dir) {
@@ -24,12 +23,19 @@ public class Bullet extends GameObject{
 		this.colider.setTranslateY(y);
 	}
 
+	public int getType(){
+		return this.type;
+	}
+
+	public void setType(int type){
+		this.type = type;
+		get_colider().setFill(bullet_color[type]);
+	}
+
 	//Change the position of the bullet on the Y axis.
 	public void move() {
-		//System.out.println(this.get_colider().getTranslateY() );
 		double newX = this.colider.getTranslateY() + (this.dir * this.vel);
 		this.colider.setTranslateY(newX);
-
 	}
 
 	public void colition(){

@@ -1,14 +1,18 @@
 package Application;
 	
+
 import Game.Bullet;
 import Game.Controller;
+import Game.Enemy;
 import Game.Player;
+import estruc_datos.LinkedList;
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -24,6 +28,9 @@ import javafx.util.Duration;
 
 
 public class Main extends Application {
+	//Esto iría en el mannager
+	LinkedList<Enemy> enemyList;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -33,10 +40,23 @@ public class Main extends Application {
 			
 			Bullet balaMala = new Bullet(100.0f,-300.0f,1);
 			balaMala.get_colider().setFill(Color.GREEN);
+			balaMala.setType(2);
 
 			BorderPane root = new BorderPane();
 			root.getChildren().add(player.get_colider());
 			
+			//Enemy test
+			enemyList = new LinkedList<Enemy>(new Enemy(200, 40));
+			root.getChildren().add(enemyList.get(0).get_colider());
+			enemyList.get(0).get_colider().setFill(Color.GREEN);
+			for(int i=1;i<5;i++){
+				int lastx = (int) enemyList.get(i-1).get_colider().getX();
+				Enemy enemy = new Enemy(lastx+100, 40);
+				enemyList.insert(enemy);
+				enemy.get_colider().setFill(Color.GREEN);
+				root.getChildren().add(enemy.get_colider());
+			}
+
 			//Controller
 			Controller inputs  = new Controller(root);
 			root.getChildren().add(balaMala.get_colider());
@@ -72,15 +92,31 @@ public class Main extends Application {
 			    	player.move(inputs.dir);
 					balaMala.move();
 					
-					//System.out.println(root.contains);
-
+					//Enemy test: Izq: -300 Der:50
+					for(int i=0;i<enemyList.getSize();i++){
+						Enemy enemy = enemyList.get(i);
+						enemy.move();
+						double ULTIMATEX = enemy.get_colider().getTranslateX();
+						if(ULTIMATEX < -300 || ULTIMATEX > 50){
+							enemy.changeDir();
+						}
+					}
 
 			    	if(inputs.get_shoot()) {
 			    		System.out.println("Jugador disparó");
+						player.set_type(inputs.get_type());
 						player.shoot();
 			    	}
 
-					//System.out.println(player.get_usedBullets());
+					if (root.getChildren().contains(balaMala.get_colider())){
+						if (balaMala.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
+							//root.getChildren().remove(balaMala.get_colider());
+							balaMala.get_colider().setLayoutY(-300.0f);
+							player.damage(10);
+						}
+					}
+
+					//Verificar las balas que están en juego
 					if (player.get_usedBullets() != null){
 						for(int i=0;i<player.get_usedBullets().getSize();i++){
 							Bullet bullet = (Bullet) player.get_usedBullets().get(i);
@@ -96,15 +132,17 @@ public class Main extends Application {
 							//Intento uno de colisiones entre balas
 							if (bullet.get_colider().getBoundsInParent().intersects(balaMala.get_colider().getBoundsInParent())) {
 								System.out.println("CHOCÓ");
+								if(bullet.getType()==balaMala.getType()){
+									root.getChildren().remove(balaMala.get_colider());
+								}
+
 								root.getChildren().remove(bullet.get_colider());
-								root.getChildren().remove(balaMala.get_colider());
 								player.free_bullets.push(bullet);
 								player.get_usedBullets().delete(i);
-							}else{
-								System.out.println("Nahhh");
 							}
 
 							if (bullet.get_colider().getTranslateY() < -350) {
+								System.out.println(bullet.getType());
 								root.getChildren().remove(bullet.get_colider());
 								player.free_bullets.push(bullet);
 								player.get_usedBullets().delete(i);
@@ -123,7 +161,7 @@ public class Main extends Application {
 			}};
 			
 			//Creating the game scenario:
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root,1000,1000);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
