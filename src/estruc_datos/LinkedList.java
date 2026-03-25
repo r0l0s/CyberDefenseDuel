@@ -16,6 +16,16 @@ public class LinkedList<Object> extends List<Object> {
 		
 		return (Object) super.getNode(pos).getData();
 	}
+
+	public int get(Object obj){
+		int pos = 0;
+		for(int i=0;i<getSize();i++){
+			if (get(i) == obj){
+				pos = i;
+			}
+		}
+		return pos;
+	}
 	
 	//Insert methods
 	public void insert(Object data) {
