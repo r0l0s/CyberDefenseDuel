@@ -9,7 +9,7 @@
             "name": "testStrucs",
             "request": "launch",
             "mainClass": "estruc_datos.testStrucs",
-            "projectName": "CyberDefenseDuel_e2a031b2"
+            "projectName": "CyberDefenseDuel"
         },
         {
             "type": "java",

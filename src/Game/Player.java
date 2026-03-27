@@ -42,7 +42,7 @@ public class Player extends GameObject{
 	//Singleton - Returns instance of Player
 	public static Player get_instance(){
 		if (self  == null) {
-			self = new Player(100.0f,800.0f);
+			self = new Player(100.0f,500.0f);
 		}
 		return self;
 	}

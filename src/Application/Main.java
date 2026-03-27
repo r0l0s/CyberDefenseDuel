@@ -2,52 +2,26 @@ package Application;
 	
 
 import Game.Bullet;
-import Game.Controller;
 import Game.Enemy;
-import Game.Player;
+import Game.Mannager;
 import estruc_datos.LinkedList;
 import estruc_datos.StackList;
-import javafx.animation.AnimationTimer;
-import javafx.animation.TranslateTransition;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.stage.Stage;
-import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Translate;
-import javafx.util.Duration;
-import java.math.*;
 
 
 public class Main extends Application {
-	//Esto iría en el mannager
-	LinkedList<Enemy> enemyList;
-	private StackList <Bullet> free_enemyBullets;
-	private LinkedList <Bullet> used_enemyBullets;
-
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			/* region
 			//Instance of game objects
 			Player player = Player.get_instance();
-			player.get_colider().setFocusTraversable(true);
 			
-			Bullet balaMala = new Bullet(100.0f,70.0f,1);
-			balaMala.get_colider().setFill(Color.GREEN);
-			balaMala.setType(2);
 
-			BorderPane root = new BorderPane();
 			root.getChildren().add(player.get_colider());
 			
 			//Enemy test
@@ -64,6 +38,7 @@ public class Main extends Application {
 			free_enemyBullets = new StackList<Bullet>(new Bullet(100.0f,150,1));
 			for(int i=1;i<19;i++){
 				free_enemyBullets.push(new Bullet(100.0f,150,1));
+				free_enemyBullets.top().set_damage(damageByType);
 			}
 			
 
@@ -199,11 +174,18 @@ public class Main extends Application {
 							//Intento uno de colisiones entre balas
 							if (bullet.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
 									System.out.println("CHOCÓ PLAYER");
-									player.damage(10);
+									player.damage(bullet.get_damage());
 									root.getChildren().remove(bullet.get_colider());
 									free_enemyBullets.push(bullet);
 									used_enemyBullets.delete(i);
 							}
+
+							if (bullet.get_colider().getTranslateY() > 700) {
+								System.out.println("Salió");
+								root.getChildren().remove(bullet.get_colider());
+								free_enemyBullets.push(bullet);
+								used_enemyBullets.delete(i);
+        					}
 						}
 					}
 
@@ -233,7 +215,10 @@ public class Main extends Application {
 						}
 					}
 					//endregion
-							
+					
+					if (player.getHealth() <=0){
+						root.getChildren().remove(player.get_colider());
+					}
 			}
 			
 			private Node get_object(double x, double y,Node self){
@@ -247,14 +232,16 @@ public class Main extends Application {
 				return obj;
 			}
 		};
+			endregion*/
 			
+			BorderPane root = new BorderPane();
+			Mannager manneger = new Mannager(root);
 
 			//Creating the game scenario:
-			Scene scene = new Scene(root,1000,1000);
-			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Scene scene = new Scene(root,1200, 760);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			gameLoop.start();
+			manneger.startLoop();
 			
 		} catch(Exception e) {
 			e.printStackTrace();

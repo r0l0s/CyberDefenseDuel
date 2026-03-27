@@ -8,7 +8,7 @@ public class Bullet extends GameObject{
 	private int vel = 4;
 	private int dir;
 	private Color[] bullet_color = {Color.RED,Color.BLUE,Color.YELLOW};; //Provisional
-	private boolean enemy;
+	private int[] damage = new int[3];
 
 	//Constructor
 	public Bullet(float x, float y, int dir) {
@@ -20,6 +20,14 @@ public class Bullet extends GameObject{
 		this.colider.setUserData(this);
 	}
 	
+	public void set_damage(int[]values){
+		this.damage = values;
+	}
+
+	public int get_damage(){
+		return this.damage[this.type];
+	}
+
 	public void setPosition(double x,double y){
 		this.colider.setTranslateX(x);
 		this.colider.setTranslateY(y);
@@ -34,13 +42,6 @@ public class Bullet extends GameObject{
 		get_colider().setFill(bullet_color[type]);
 	}
 
-	public void setEnemyBullet(){
-		this.enemy = true;
-	}
-
-	public boolean getEnemyBullet(){
-		return this.enemy;
-	}
 
 	//Change the position of the bullet on the Y axis.
 	public void move() {
