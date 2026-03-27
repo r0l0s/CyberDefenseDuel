@@ -13,6 +13,7 @@
         "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx-swt.jar",
         "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jdk.jsobject.jar",
         "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jfx.incubator.input.jar",
-        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jfx.incubator.richtext.jar"
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jfx.incubator.richtext.jar",
+        "C:/Users/luist/OneDrive/Escritorio/JavaFX/javafx-sdk-26/lib/**/*.jar"
     ]
 }
