@@ -1,4 +1,4 @@
-package Game;
+package Application;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -33,6 +33,7 @@ public class GameIU extends Application {
         // Guardamos el stage (ventana) una vez y lo vamos reciclando entre pantallas.
         ventana = stage;
         ventana.setTitle("Cyber Defense Duel - JavaFX UI");
+        //ventana.setMaximized(true);
 
         // Se inicia el proceso de login.
         mostrarPantallaLogin();
@@ -121,6 +122,7 @@ public class GameIU extends Application {
         });
 
         Scene escena = new Scene(root, 1200, 760);
+        //Scene escena = new Scene(root);
         ventana.setScene(escena);
     }
 
@@ -309,6 +311,7 @@ public class GameIU extends Application {
         abajo.setPadding(new Insets(18, 0, 0, 0));
 
         root.setBottom(abajo);
+
 
         Scene escena = new Scene(root, 1200, 760);
         ventana.setScene(escena);

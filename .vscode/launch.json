@@ -9,21 +9,20 @@
             "name": "testStrucs",
             "request": "launch",
             "mainClass": "estruc_datos.testStrucs",
-            "projectName": "CyberDefenseDuel_e2a031b2"
+            "projectName": "CyberDefenseDuel"
         },
         {
             "type": "java",
             "name": "Play game (direct)",
             "request": "launch",
             "mainClass": "Application.Main",
-            "vmArgs": "--module-path \"C:/Users/luist/OneDrive/Escritorio/JavaFX/javafx-sdk-26/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-25.0.2/lib\" --add-modules javafx.controls,javafx.fxml"        
         },
         {
             "type": "java",
             "name": "Play game (menu UI)",
             "request": "launch",
-            "mainClass": "Game.GameIU",
-            "vmArgs": "--module-path \"C:/Users/luist/OneDrive/Escritorio/JavaFX/javafx-sdk-26/lib\" --add-modules javafx.controls,javafx.fxml"
-        }
+            "mainClass": "Application.GameIU",
+            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-25.0.2/lib\" --add-modules javafx.controls,javafx.fxml"        }
     ]
 }

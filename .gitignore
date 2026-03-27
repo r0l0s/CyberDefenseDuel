@@ -11,3 +11,6 @@ target/
 # Archivos del sistema/editor
 .DS_Store
 Thumbs.db
+
+#Otros archivos
+.vscode/.
