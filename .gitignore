@@ -1,0 +1,13 @@
+# Archivos compilados de Java
+bin/
+out/
+target/
+*.class
+
+# Logs y archivos temporales
+*.log
+*.tmp
+
+# Archivos del sistema/editor
+.DS_Store
+Thumbs.db
