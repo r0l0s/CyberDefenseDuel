@@ -1,5 +1,5 @@
 
-package Game;
+package GameData;
 
 // This class handles all data related to the player
 public class PlayerDataManager {

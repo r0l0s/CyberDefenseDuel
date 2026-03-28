@@ -39,6 +39,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			//Instance of game objects
+			// El objeto solamente existe dentro del metodo
+			// Tenes que tener una referencia como atributo de la clase
 			Player player = Player.get_instance();
 			player.get_colider().setFocusTraversable(true);
 			
