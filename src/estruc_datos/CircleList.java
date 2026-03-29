@@ -1,14 +1,17 @@
 package estruc_datos;
 
 @SuppressWarnings("hiding")
-public class CircleList<Object> extends LinkedList<Object> {
+public class CircleList<Object> extends DoubleEndedList<Object> {
 
 	public CircleList(Object data){
 		super(data);
 	}
 
+	public CircleList(){
+		super();
+	}
+
 	//Insert methods
-	@Override
 	public void insert(Object data) {
 		super.insert(data);
 		this.last.setNext(this.first);
@@ -16,10 +19,11 @@ public class CircleList<Object> extends LinkedList<Object> {
 	
 	public void insert_at(int pos,Object data) {
 		super.insert_at(pos, data);
-		this.last.setNext(this.first);
+		//this.last.setNext(first);
 	}
 
 	public void delete(int pos){
+		//printAll();
 		super.delete(pos);
 		this.last.setNext(this.first);
 	}

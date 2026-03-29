@@ -1,5 +1,6 @@
 package Game;
 
+import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 import estruc_datos.StackList;
 import javafx.animation.AnimationTimer;
@@ -11,10 +12,10 @@ import javafx.scene.Node;
 
 public class Mannager {
     // Listado de enemigos para el juego
-    private LinkedList<Enemy> enemyList;
+    private DoubleEndedList<Enemy> enemyList;
     // Listado de balas y proyectiles para el juego.
     private StackList<Bullet> free_enemyBullets;
-    private LinkedList<Bullet> used_enemyBullets;
+    private DoubleEndedList<Bullet> used_enemyBullets;
     private int[] damageByType = { 10, 20, 10 };
 
     // Jugador
@@ -29,7 +30,7 @@ public class Mannager {
         player.get_colider().setFocusTraversable(true);
         Controller inputs = new Controller(root);
 
-        enemyList = new LinkedList<Enemy>(new Enemy(200, 40, 0));
+        enemyList = new DoubleEndedList<Enemy>(new Enemy(200, 40, 0));
         root.getChildren().add(enemyList.get(0).get_colider());
         for (int i = 1; i < 9; i++) {
             int lastx = (int) enemyList.get(i - 1).get_colider().getX();
@@ -191,7 +192,7 @@ public class Mannager {
                         // Rectangle colider = get_instance().get_colider();
                         free_enemyBullets.pop();
                         if (used_enemyBullets == null) {
-                            used_enemyBullets = new LinkedList<Bullet>(bullet);
+                            used_enemyBullets = new DoubleEndedList<Bullet>(bullet);
                         } else {
                             used_enemyBullets.insert(bullet);
                         }

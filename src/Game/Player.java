@@ -1,5 +1,6 @@
 package Game;
 
+import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 
 import estruc_datos.StackList;
@@ -17,7 +18,7 @@ public class Player extends GameObject{
 	private int vel;	
 	//Stacks for available bullets
 	public StackList<Bullet> free_bullets;
-	private LinkedList<Bullet> used_bullets;
+	private DoubleEndedList<Bullet> used_bullets;
 	//Type of shot bullet 
 	private int defence_type = 0;
 
@@ -60,7 +61,7 @@ public class Player extends GameObject{
 		this.defence_type  = type;
 	}
 
-	public LinkedList<Bullet> get_usedBullets(){
+	public DoubleEndedList<Bullet> get_usedBullets(){
 		return this.used_bullets;
 	}
 
@@ -79,7 +80,7 @@ public class Player extends GameObject{
 
 		this.free_bullets.pop();
 		if (this.used_bullets  == null){
-			this.used_bullets = new LinkedList<Bullet>(bullet);
+			this.used_bullets = new DoubleEndedList<Bullet>(bullet);
 		}else{
 			this.used_bullets.insert(bullet);
 		}

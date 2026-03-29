@@ -6,7 +6,7 @@ public class DoubleLinkedList<Object>{
 	
     public DoubleLinkedList() {
 		this.first = new Node<>(null,null);
-		this.size = 1;
+		this.size = 0;
 	}
 	
 	//Setters and getters
@@ -95,9 +95,11 @@ public class DoubleLinkedList<Object>{
 		}
 		
 		//If the delete is in the first position
-		if (node.getNext()!=null) {
+		if (node.getNext()!=null & node != last) {
 			//If the delete is in any other place
 			last.setNext(node.getNext());
+		}else{
+			this.first = node.getNext();
 		}
 		
 		this.size--;

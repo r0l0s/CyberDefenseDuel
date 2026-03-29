@@ -7,6 +7,10 @@ public class DoubleEndedList<Object> extends List<Object> {
 		super(data);
 	}
 	
+	public DoubleEndedList(){
+		super();
+	}
+
 	//Get methods:
 	@SuppressWarnings("unchecked")
 	public Object get(int pos) {
@@ -32,8 +36,9 @@ public class DoubleEndedList<Object> extends List<Object> {
 		Node<Object> node = new Node<>(data);
 		if (getSize()==0){
 			this.first = node;
+		}else{
+			this.last.setNext(node);
 		}
-		this.last.setNext(node);
 		this.last = node;
 		this.size++;
 	}
@@ -50,6 +55,9 @@ public class DoubleEndedList<Object> extends List<Object> {
 		//If the insertion is in the first position
 		if (pos ==  0) {
 			node = this.first;
+		}else if (pos == getSize()){
+			insert(data);
+			return;
 		}else {
 			node = this.getNode(pos-1);
 		}
@@ -77,6 +85,7 @@ public class DoubleEndedList<Object> extends List<Object> {
 		}
 		
 		//If the delete is in the first position
+		System.out.println();
 		if (node.getNext()==null) {
 			this.last = last;
 			this.last.setNext(null);

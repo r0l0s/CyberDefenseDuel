@@ -1,20 +1,39 @@
 package estruc_datos;
 
-@SuppressWarnings("hiding")
-public class LinkedList<Object> extends List<Object> {
-
-	public LinkedList(Object data) {
-		super(data);
+public class LinkedList<Object>{
+    protected Node first;
+	protected int size;
+	
+    public LinkedList() {
+		this.first = new Node<>(null);
+		this.size = 0;
 	}
 	
-	//Get methods:
+	//Setters and getters
+	public int getSize() {
+		return this.size;
+	}
+	
+	protected Node getNode(int pos) {
+		Node<?> node = this.first;
+		for (int i=0;i<this.size;i++) {
+			if(pos == i) {
+				break;
+			}
+			node = node.getNext();
+		}
+		return node;
+		
+	}
+
+    //Get methods:
 	@SuppressWarnings("unchecked")
 	public Object get(int pos) {
 		if (pos>this.size || pos<0) {
 			throw new IndexOutOfBoundsException("Posición de la lista se sale de sus límites");
 		}
 		
-		return (Object) super.getNode(pos).getData();
+		return (Object) getNode(pos).getData();
 	}
 
 	public int get(Object obj){
@@ -33,8 +52,8 @@ public class LinkedList<Object> extends List<Object> {
 		if (getSize()==0){
 			this.first = node;
 		}
-		this.last.setNext(node);
-		this.last = node;
+
+		getNode(getSize()-1).setNext(node);
 		this.size++;
 	}
 	
@@ -69,6 +88,7 @@ public class LinkedList<Object> extends List<Object> {
 		Node<Object> node = this.getNode(pos);
 		Node<Object> last = this.getNode(pos-1);
 		
+
 		//If the delete is in the last position
 		if (last == null) {
 			this.size--;
@@ -77,14 +97,37 @@ public class LinkedList<Object> extends List<Object> {
 		}
 		
 		//If the delete is in the first position
-		if (node.getNext()==null) {
-			this.last = last;
-			this.last.setNext(null);
-		}else {
+		if (node.getNext()!=null & node != last) {
 			//If the delete is in any other place
 			last.setNext(node.getNext());
+		}else{
+			this.first = node.getNext();
 		}
 		
 		this.size--;
 	}
+	
+	class Node<T>{
+		private T data;
+		private Node<?> next;
+		
+		Node(T data){
+			this.next = null;
+			this.data = data;
+		}
+		
+		public Node getNext() {
+			return this.next;
+		}
+
+		public void setNext(Node next) {
+			this.next = next;
+		}
+
+		public T getData() {
+			return data;
+		}		
+		
+	}
+	
 }
