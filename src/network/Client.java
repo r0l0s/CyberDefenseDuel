@@ -11,8 +11,8 @@ public class Client {
     private DataOutputStream out;
     
     // We use a Thread to prevent blocking the JavaFX UI
-    public void Initialize() {
-        
+    public void Initialize(String UserName, String Password) {
+        System.out.println("Authenticating with" + UserName + " " + Password);
         // 1. Create a new background Thread
         Thread clientThread = new Thread(() -> {
             try {
@@ -22,6 +22,8 @@ public class Client {
                 out = new DataOutputStream(socket.getOutputStream());
                 
                 System.out.println("Connected to Server!");
+                out.writeUTF(UserName);
+                out.writeUTF(Password);
                 
                 // 3. Keep listening for console input (Temporary for testing)
                 // Note: In the final game, GameIU will send data, not the console.
