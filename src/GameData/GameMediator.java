@@ -13,6 +13,7 @@ public class GameMediator {
     private Optional<PlayerDataManager> MaybePlayerDataManager = Optional.empty();
     private Optional<Client> MaybeClient = Optional.empty();
 
+
     // These methods are to set each member for the mediator ---------------------------------
     public void SetPlayer(Player PlayerRef){
         this.MaybePlayer = Optional.ofNullable(PlayerRef);
@@ -24,5 +25,10 @@ public class GameMediator {
         this.MaybeClient = Optional.ofNullable(ClientRef);
     }
     // ---------------------------------------------------------------------------------------
+
+    public void StartClient(){
+        System.out.println("Starting Client");
+        MaybeClient.ifPresent(Client -> Client.Initialize());
+    }
 
 }

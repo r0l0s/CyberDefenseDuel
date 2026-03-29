@@ -15,8 +15,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import GameData.GameMediator;
 
 public class GameIU extends Application {
+
+    private static GameIU instance;
+
+    private GameMediator Mediator;
 
     // Estado general de la interfaz.
     private Stage ventana;
@@ -30,6 +35,10 @@ public class GameIU extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        this.Mediator = GameManager.getMediator();
+
+        instance = this;
         // Guardamos el stage (ventana) una vez y lo vamos reciclando entre pantallas.
         ventana = stage;
         ventana.setTitle("Cyber Defense Duel - JavaFX UI");
@@ -38,6 +47,26 @@ public class GameIU extends Application {
         // Se inicia el proceso de login.
         mostrarPantallaLogin();
         ventana.show();
+    }
+
+    public static GameIU getInstance() {
+        return instance;
+    }
+
+    public Stage getVentana() {
+        return ventana;
+    }
+
+    public void mostrarLogin() {
+        mostrarPantallaLogin();
+    }
+
+    public void mostrarAvatar() {
+        mostrarPantallaAvatar();
+    }
+
+    public void mostrarMapa() {
+        mostrarPantallaMapa();
     }
 
     // 1) Pantalla de login/registro.
@@ -105,6 +134,7 @@ public class GameIU extends Application {
                 return;
             }
             usuario = campoUsuario.getText().trim();
+            Mediator.StartClient();
             mostrarPantallaAvatar();
         });
 
