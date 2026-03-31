@@ -16,6 +16,20 @@
             "name": "testStrucs",
             "request": "launch",
             "mainClass": "estruc_datos.testStrucs",
+            "projectName": "CyberDefenseDuel_9f76089a"
+        },
+        {
+            "type": "java",
+            "name": "RendimientoEstructuraDatos",
+            "request": "launch",
+            "mainClass": "estruc_datos.RendimientoEstructuraDatos",
+            "projectName": "CyberDefenseDuel_9f76089a"
+        },
+        {
+            "type": "java",
+            "name": "testStrucs",
+            "request": "launch",
+            "mainClass": "estruc_datos.testStrucs",
             "projectName": "CyberDefenseDuel"
         },
         {
