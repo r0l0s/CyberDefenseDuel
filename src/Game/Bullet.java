@@ -1,6 +1,8 @@
 package Game;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class Bullet extends GameObject{
 	//Bullet movement params
@@ -12,12 +14,15 @@ public class Bullet extends GameObject{
 
 	//Constructor
 	public Bullet(float x, float y, int dir) {
-		super(50.0f,50.0f);
+		super(50.0f,50.0f,6);
 		this.colider.setX(x);
 		this.colider.setY(y);
 		this.colider.setFill(Color.YELLOW);
 		this.dir = dir;
 		this.colider.setUserData(this);
+		this.sprites[0] = new Image("img/b0.png");
+		this.sprites[1] = new Image("img/m0.png");
+		this.sprites[2] = new Image("img/c0.png");
 	}
 	
 	public void set_damage(int[]values){
@@ -39,7 +44,7 @@ public class Bullet extends GameObject{
 
 	public void setType(int type){
 		this.type = type;
-		get_colider().setFill(bullet_color[type]);
+		get_colider().setFill(new ImagePattern(sprites[type]));
 	}
 
 

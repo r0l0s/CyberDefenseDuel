@@ -4,7 +4,9 @@ import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 
 import estruc_datos.StackList;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Player extends GameObject{
@@ -24,7 +26,7 @@ public class Player extends GameObject{
 
 	//Constructor
 	private Player(float x, float y) {
-		super(75.0f,75.0f);
+		super(75.0f,75.0f,2);
 		//Configuring the X and Y position of player and its velocity.
 		this.colider.setX(x);
 		this.x = x;
@@ -38,6 +40,10 @@ public class Player extends GameObject{
 		for(int i=0;i<9;i++) {
 			this.free_bullets.push(new Bullet(this.x,this.y,-1));
 		}
+		//Configuring sprite
+		this.sprites[0] = new Image("img/nave0.png");
+		this.sprites[1] = new Image("img/nave1.png");
+		this.colider.setFill(new ImagePattern(sprites[0]));
 	}
 	
 	//Singleton - Returns instance of Player
@@ -53,6 +59,10 @@ public class Player extends GameObject{
 		return this.health;
 	}
 	
+	public void setHeath(int hp){
+		this.health = hp;
+	}
+
 	public int get_type() {
 		return this.defence_type;
 	}
@@ -65,12 +75,20 @@ public class Player extends GameObject{
 		return this.used_bullets;
 	}
 
+	public Image get_sprite(int pos){
+		return this.sprites[pos];
+	}
+
 	//Change the position of the player on the X axis.
 	public void move(int dir) {
 		double newX = this.colider.getTranslateX() + (dir * this.vel);
 		this.colider.setTranslateX(newX);
-		//System.out.println(this.free_bullets);
-		//System.out.println(this.used_bullets);
+		
+		if (dir == 0){
+			this.colider.setFill(new ImagePattern(sprites[0]));	
+		}else{
+			this.colider.setFill(new ImagePattern(sprites[1]));	
+		}
 	}
 
 	//Create a object Bullet with the position of the X and Y player axis

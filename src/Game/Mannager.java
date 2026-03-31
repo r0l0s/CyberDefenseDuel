@@ -9,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 public class Mannager {
     // Listado de enemigos para el juego
@@ -16,16 +17,28 @@ public class Mannager {
     // Listado de balas y proyectiles para el juego.
     private StackList<Bullet> free_enemyBullets;
     private DoubleEndedList<Bullet> used_enemyBullets;
-    private int[] damageByType = { 10, 20, 10 };
+    //private int[] damageByType = { 10, 20, 10 };
 
     // Jugador
     private Player player = Player.get_instance();
 
     //Game loop man
     final AnimationTimer gameLoop;
+    //Parámetros pasados por el config:
+    int initialHP;
+    int baseSpawnRate;
+    int baseAttackSpeed;
+    int scorePerKill;
+    int difficultyStepScore;
+    int spawnMultiplierPerLevel;
+    int speedAddPerLevel;
+    int[] damageByType;
 
     public Mannager(BorderPane root) {
+        damageByType = new int[]{ 10, 20, 10 };
+        initialHP = 100;
         // Agregamos los componentes al juego:
+        player.setHeath(initialHP);
         root.getChildren().add(player.get_colider());
         player.get_colider().setFocusTraversable(true);
         Controller inputs = new Controller(root);
@@ -87,6 +100,9 @@ public class Mannager {
                     }
                     timerAcumulado = 0;
                 }
+
+                //Prueba animación sprites
+                final ImageView spr_nave = new ImageView(player.get_sprite(0));
 
                 // region Movimiento Enemigo
                 // Enemy test: Izq: -300 Der:50
@@ -162,8 +178,7 @@ public class Mannager {
                         bullet.move();
 
                         // Intento uno de colisiones entre balas
-                        if (bullet.get_colider().getBoundsInParent()
-                                .intersects(player.get_colider().getBoundsInParent())) {
+                        if (bullet.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
                             System.out.println("CHOCÓ PLAYER");
                             player.damage(bullet.get_damage());
                             root.getChildren().remove(bullet.get_colider());
