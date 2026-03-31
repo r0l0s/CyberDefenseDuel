@@ -10,6 +10,12 @@ abstract class List <T>{
 		this.last = this.first;
 		this.size = 1;
 	}
+
+	List(){
+		this.first = null;
+		this.last = null;
+		this.size = 0;
+	}
 	
 	//Setters and getters
 	public int getSize() {

@@ -1,11 +1,11 @@
 package estruc_datos;
 
-public class LinkedList<Object>{
+public class DoubleLinkedList<Object>{
     protected Node first;
 	protected int size;
 	
-    public LinkedList() {
-		this.first = new Node<>(null);
+    public DoubleLinkedList() {
+		this.first = new Node<>(null,null);
 		this.size = 0;
 	}
 	
@@ -48,11 +48,10 @@ public class LinkedList<Object>{
 	
 	//Insert methods
 	public void insert(Object data) {
-		Node<Object> node = new Node<>(data);
+		Node<Object> node = new Node<>(data,getNode(getSize()-1));
 		if (getSize()==0){
 			this.first = node;
 		}
-
 		getNode(getSize()-1).setNext(node);
 		this.size++;
 	}
@@ -74,7 +73,7 @@ public class LinkedList<Object>{
 		}
 		
 		Node<Object> next_node = node.getNext();
-		Node<Object> new_node = new Node<>(data);
+		Node<Object> new_node = new Node<>(data,node);
 		
 		new_node.setNext(next_node);
 		node.setNext(new_node);
@@ -88,7 +87,6 @@ public class LinkedList<Object>{
 		Node<Object> node = this.getNode(pos);
 		Node<Object> last = this.getNode(pos-1);
 		
-
 		//If the delete is in the last position
 		if (last == null) {
 			this.size--;
@@ -110,9 +108,11 @@ public class LinkedList<Object>{
 	class Node<T>{
 		private T data;
 		private Node<?> next;
+        private Node<?> last; 
 		
-		Node(T data){
+		Node(T data, Node last){
 			this.next = null;
+            this.last = last;
 			this.data = data;
 		}
 		
@@ -120,6 +120,10 @@ public class LinkedList<Object>{
 			return this.next;
 		}
 
+        public Node getLast(){
+            return this.last;
+        }
+		
 		public void setNext(Node next) {
 			this.next = next;
 		}

@@ -1,9 +1,12 @@
 package Game;
 
+import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 
 import estruc_datos.StackList;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Player extends GameObject{
@@ -17,13 +20,13 @@ public class Player extends GameObject{
 	private int vel;	
 	//Stacks for available bullets
 	public StackList<Bullet> free_bullets;
-	private LinkedList<Bullet> used_bullets;
+	private DoubleEndedList<Bullet> used_bullets;
 	//Type of shot bullet 
 	private int defence_type = 0;
 
 	//Constructor
 	private Player(float x, float y) {
-		super(75.0f,75.0f);
+		super(75.0f,75.0f,2);
 		//Configuring the X and Y position of player and its velocity.
 		this.colider.setX(x);
 		this.x = x;
@@ -37,12 +40,16 @@ public class Player extends GameObject{
 		for(int i=0;i<9;i++) {
 			this.free_bullets.push(new Bullet(this.x,this.y,-1));
 		}
+		//Configuring sprite
+		this.sprites[0] = new Image("img/nave0.png");
+		this.sprites[1] = new Image("img/nave1.png");
+		this.colider.setFill(new ImagePattern(sprites[0]));
 	}
 	
 	//Singleton - Returns instance of Player
 	public static Player get_instance(){
 		if (self  == null) {
-			self = new Player(100.0f,250.0f);
+			self = new Player(100.0f,500.0f);
 		}
 		return self;
 	}
@@ -52,6 +59,10 @@ public class Player extends GameObject{
 		return this.health;
 	}
 	
+	public void setHeath(int hp){
+		this.health = hp;
+	}
+
 	public int get_type() {
 		return this.defence_type;
 	}
@@ -60,16 +71,24 @@ public class Player extends GameObject{
 		this.defence_type  = type;
 	}
 
-	public LinkedList<Bullet> get_usedBullets(){
+	public DoubleEndedList<Bullet> get_usedBullets(){
 		return this.used_bullets;
+	}
+
+	public Image get_sprite(int pos){
+		return this.sprites[pos];
 	}
 
 	//Change the position of the player on the X axis.
 	public void move(int dir) {
 		double newX = this.colider.getTranslateX() + (dir * this.vel);
 		this.colider.setTranslateX(newX);
-		//System.out.println(this.free_bullets);
-		//System.out.println(this.used_bullets);
+		
+		if (dir == 0){
+			this.colider.setFill(new ImagePattern(sprites[0]));	
+		}else{
+			this.colider.setFill(new ImagePattern(sprites[1]));	
+		}
 	}
 
 	//Create a object Bullet with the position of the X and Y player axis
@@ -79,7 +98,7 @@ public class Player extends GameObject{
 
 		this.free_bullets.pop();
 		if (this.used_bullets  == null){
-			this.used_bullets = new LinkedList<Bullet>(bullet);
+			this.used_bullets = new DoubleEndedList<Bullet>(bullet);
 		}else{
 			this.used_bullets.insert(bullet);
 		}
