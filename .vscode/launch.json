@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GameManager",
+            "request": "launch",
+            "mainClass": "Application.GameManager",
+            "projectName": "CyberDefenseDuel_74420a58"
+        },
+        {
+            "type": "java",
             "name": "testStrucs",
             "request": "launch",
             "mainClass": "estruc_datos.testStrucs",
@@ -27,9 +34,16 @@
         },
         {
             "type": "java",
-            "name": "Play game",
+            "name": "Play game (direct)",
             "request": "launch",
             "mainClass": "Application.Main",
+            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-25.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "Play game (menu UI)",
+            "request": "launch",
+            "mainClass": "Application.GameIU",
             "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-25.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
         }
     ]
