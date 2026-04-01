@@ -9,15 +9,19 @@ public class testStrucs {
         ci.insert_at(ci.getSize(),"Z");
         
         //ci.insert("Z");
-        ci.insert_at(1,"F");
-        
+        ci.delete(1);
+        //System.out.println(ci.getSize());
+        ci.insert_at(1,"G");
+        ci.printAll();
+        /* 
         for(int i=0;i<ci.getSize();i++){
             System.out.println(ci.get(i));
         }
-        System.out.println("-----------");/*
-        */
+        System.out.println("-----------");*/
+        /*
         //ci.printAll();
-        ci.delete(0);
+        ci.delete(1);
+        ci.insert_at(1, "E");
         for(int i=0;i<ci.getSize();i++){
             System.out.println(ci.get(i));
         }/*

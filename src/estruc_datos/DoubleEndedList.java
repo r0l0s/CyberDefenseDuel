@@ -52,22 +52,25 @@ public class DoubleEndedList<Object> extends List<Object> {
 			throw new IndexOutOfBoundsException("Posición de la lista se sale de sus límites");
 		}
 		
+		Node<Object> new_node = new Node<>(data);
 		Node<Object> node = null;
+		Node<Object> next_node;
+
 		//If the insertion is in the first position
 		if (pos ==  0) {
 			node = this.first;
+			next_node = this.first;
+			this.first = new_node;		
 		}else if (pos == getSize()){
 			insert(data);
 			return;
 		}else {
 			node = this.getNode(pos-1);
+			next_node = node.getNext();
+			node.setNext(new_node);
 		}
 		
-		Node<Object> next_node = node.getNext();
-		Node<Object> new_node = new Node<>(data);
-		
 		new_node.setNext(next_node);
-		node.setNext(new_node);
 		this.size++;
 		
 	}

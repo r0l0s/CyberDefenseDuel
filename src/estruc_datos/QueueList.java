@@ -8,6 +8,11 @@ public class QueueList<Object> extends List<Object> {
 		// TODO Auto-generated constructor stub
 	}
 
+	public QueueList() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	//Get methods:
 		@SuppressWarnings("unchecked")
 		public Object peek(){
