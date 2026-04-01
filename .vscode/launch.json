@@ -6,37 +6,34 @@
     "configurations": [
         {
             "type": "java",
-            "name": "GameManager",
-            "request": "launch",
-            "mainClass": "Application.GameManager",
-            "projectName": "CyberDefenseDuel_74420a58"
-        },
-        {
-            "type": "java",
             "name": "testStrucs",
             "request": "launch",
             "mainClass": "estruc_datos.testStrucs",
-            "projectName": "CyberDefenseDuel_9f76089a"
+            "projectName": "CyberDefenseDuel_e2a031b2"
+        },
+        {
+            "type": "java",
+            "name": "GameManager",
+            "request": "launch",
+            "mainClass": "Application.GameManager"
+        },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "network.Server"
         },
         {
             "type": "java",
             "name": "RendimientoEstructuraDatos",
             "request": "launch",
-            "mainClass": "estruc_datos.RendimientoEstructuraDatos",
-            "projectName": "CyberDefenseDuel_9f76089a"
-        },
-        {
-            "type": "java",
-            "name": "testStrucs",
-            "request": "launch",
-            "mainClass": "estruc_datos.testStrucs",
-            "projectName": "CyberDefenseDuel"
+            "mainClass": "estruc_datos.RendimientoEstructuraDatos"
         },
         {
             "type": "java",
             "name": "Play game (direct)",
             "request": "launch",
-            "mainClass": "Application.Main",
+            "mainClass": "Application.GameMain",
             "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-25.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {

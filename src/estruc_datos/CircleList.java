@@ -19,7 +19,7 @@ public class CircleList<Object> extends DoubleEndedList<Object> {
 	
 	public void insert_at(int pos,Object data) {
 		super.insert_at(pos, data);
-		//this.last.setNext(first);
+		this.last.setNext(first);
 	}
 
 	public void delete(int pos){

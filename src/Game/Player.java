@@ -49,7 +49,7 @@ public class Player extends GameObject{
 	//Singleton - Returns instance of Player
 	public static Player get_instance(){
 		if (self  == null) {
-			self = new Player(100.0f,500.0f);
+			self = new Player(100.0f,620.0f);
 		}
 		return self;
 	}
@@ -109,7 +109,9 @@ public class Player extends GameObject{
 	
 	public void damage(int value){
 		this.health -= value;
-		System.out.print(this.health);
+		if (this.health<0){
+			this.health = 0;
+		}
 	}
 	
 }

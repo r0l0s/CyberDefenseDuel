@@ -28,7 +28,7 @@ public class GameMediator {
 
     public void StartClient(){
         System.out.println("Starting Client");
-        MaybeClient.ifPresent(Client -> Client.Initialize());
+        MaybeClient.ifPresent(Client -> Client.Initialize("Eze","aaa"));
     }
 
 }

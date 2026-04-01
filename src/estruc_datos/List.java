@@ -30,6 +30,9 @@ abstract class List <T>{
 			}
 			node = node.getNext();
 		}
+		if (pos<0){
+			node = null;
+		}
 		return node;
 		
 	}

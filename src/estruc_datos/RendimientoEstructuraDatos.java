@@ -25,7 +25,7 @@ public class RendimientoEstructuraDatos {
         linkedlst.insert_at(linkedlst.getSize()-1, "Z");
         dlinkedlst.insert_at(dlinkedlst.getSize()-1, "Z");
         dendedlst.insert_at(dendedlst.getSize()-1, "Z");
-        circlelst.insert_at(circlelst.getSize()-1, "Z");
+        circlelst.insert_at(circlelst.getSize(), "Z");
 
         //Inserción en posición intermedia
         array[(int) n/2] = "F";

@@ -6,9 +6,14 @@ import estruc_datos.StackList;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class Mannager {
@@ -21,6 +26,8 @@ public class Mannager {
 
     // Jugador
     private Player player = Player.get_instance();
+    private int score = 0;
+    private int actual_level = 1;
 
     //Game loop man
     final AnimationTimer gameLoop;
@@ -35,20 +42,47 @@ public class Mannager {
     int[] damageByType;
 
     public Mannager(BorderPane root) {
-        damageByType = new int[]{ 10, 20, 10 };
-        initialHP = 100;
+        configureParams();
         // Agregamos los componentes al juego:
         player.setHeath(initialHP);
         root.getChildren().add(player.get_colider());
         player.get_colider().setFocusTraversable(true);
         Controller inputs = new Controller(root);
 
-        enemyList = new DoubleEndedList<Enemy>(new Enemy(200, 40, 0));
+        //Labels importantes para manejo de datos
+        Label lbl_enemy = new Label("ENEMY:");
+        lbl_enemy.setTextFill(Color.web("#8c00ff"));
+        lbl_enemy.setFont(Font.font("Segoe UI", 20));
+        Label lbl_enemyLife = new Label("HP:");
+        lbl_enemyLife.setTextFill(Color.web("#8c00ff"));
+        lbl_enemyLife.setFont(Font.font("Segoe UI", 20));   
+        Label lbl_enemyScore = new Label("Score:");
+        lbl_enemyScore.setTextFill(Color.web("#8c00ff"));
+        lbl_enemyScore.setFont(Font.font("Segoe UI", 20));   
+
+        HBox enemyLabels = new HBox(100, lbl_enemy, lbl_enemyLife,lbl_enemyScore);
+        enemyLabels.setAlignment(Pos.TOP_LEFT);
+        root.setTop(enemyLabels);
+
+        Label lbl_playerHP = new Label("HP: "+player.getHealth());
+        lbl_playerHP.setTextFill(Color.web("#ff0000"));
+        lbl_playerHP.setFont(Font.font("Segoe UI", 20));
+        Label lbl_score = new Label("Score: "+score);
+        lbl_score.setTextFill(Color.web("#ff0000"));
+        lbl_score.setFont(Font.font("Segoe UI", 20));
+        Label lbl_level = new Label("Level: "+actual_level);
+        lbl_level.setTextFill(Color.web("#ff0000"));
+        lbl_level.setFont(Font.font("Segoe UI", 20));    
+
+        HBox playerLabels = new HBox(450, lbl_playerHP, lbl_score,lbl_level);
+        root.setBottom(playerLabels);
+        
+        enemyList = new DoubleEndedList<Enemy>(new Enemy(200, 55, 0));
         root.getChildren().add(enemyList.get(0).get_colider());
         for (int i = 1; i < 9; i++) {
             int lastx = (int) enemyList.get(i - 1).get_colider().getX();
             int ranint = (int) (Math.random() * ((2 - 0) + 1)) + 0;
-            Enemy enemy = new Enemy(lastx + 100, 40, ranint);
+            Enemy enemy = new Enemy(lastx + 100, 55, ranint);
             enemyList.insert(enemy);
             root.getChildren().add(enemy.get_colider());
         }
@@ -88,7 +122,6 @@ public class Mannager {
                 player.move(inputs.dir);
 
                 if (inputs.get_shoot()) {
-                    System.out.println("Jugador disparó");
                     player.set_type(inputs.get_type());
                     player.shoot();
                 }
@@ -144,6 +177,8 @@ public class Mannager {
                                 root.getChildren().remove(enemyBullet.get_colider());
                                 free_enemyBullets.push(enemyBullet);
                                 used_enemyBullets.delete(used_enemyBullets.get(enemyBullet));
+                                score +=  scorePerKill;
+                                lbl_score.setText("Score : "+score);
                             }
 
                             root.getChildren().remove(bullet.get_colider());
@@ -152,7 +187,6 @@ public class Mannager {
                         }
 
                         if (bullet.get_colider().getTranslateY() < -350) {
-                            System.out.println(bullet.getType());
                             root.getChildren().remove(bullet.get_colider());
                             player.free_bullets.push(bullet);
                             player.get_usedBullets().delete(i);
@@ -179,15 +213,14 @@ public class Mannager {
 
                         // Intento uno de colisiones entre balas
                         if (bullet.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
-                            System.out.println("CHOCÓ PLAYER");
                             player.damage(bullet.get_damage());
+                            lbl_playerHP.setText("HP: "+player.getHealth());
                             root.getChildren().remove(bullet.get_colider());
                             free_enemyBullets.push(bullet);
                             used_enemyBullets.delete(i);
                         }
 
                         if (bullet.get_colider().getTranslateY() > 700) {
-                            System.out.println("Salió");
                             root.getChildren().remove(bullet.get_colider());
                             free_enemyBullets.push(bullet);
                             used_enemyBullets.delete(i);
@@ -225,6 +258,12 @@ public class Mannager {
                 if (player.getHealth() <= 0) {
                     root.getChildren().remove(player.get_colider());
                 }
+
+                if (score > difficultyStepScore){
+                    lbl_level.setText("Level: "+ ++actual_level);
+                    difficultyStepScore *= 2;
+                    //Agregar el cambio de dificultad como subir spawnrate y daño
+                }
             }
 
             private Node get_object(double x, double y, Node self) {
@@ -239,6 +278,14 @@ public class Mannager {
             }
         };
 
+    }
+
+    private void configureParams(){
+        //get data from json
+        damageByType = new int[]{ 10, 20, 10 };
+        initialHP = 100;
+        scorePerKill = 10;
+        difficultyStepScore = 100;
     }
 
     public void startLoop(){

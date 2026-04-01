@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import Game.Mannager;
 import GameData.GameMediator;
 
 public class GameIU extends Application {
@@ -330,7 +331,7 @@ public class GameIU extends Application {
 
         atras.setOnAction(e -> mostrarPantallaAvatar());
         // Solo confirma visualmente, no lanza gameplay todavia.
-        iniciar.setOnAction(e -> seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
+        iniciar.setOnAction(e -> mostrarPantallaGame());//seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
 
         HBox acciones = new HBox(14, atras, iniciar);
         acciones.setAlignment(Pos.CENTER_RIGHT);
@@ -345,6 +346,18 @@ public class GameIU extends Application {
 
         Scene escena = new Scene(root, 1200, 760);
         ventana.setScene(escena);
+    }
+
+    // 4) Pantalla de juego.
+    private void mostrarPantallaGame(){
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
+        root.setPadding(new Insets(24));
+		Mannager manneger = new Mannager(root);
+
+        Scene escena = new Scene(root,1200, 760);
+        ventana.setScene(escena);
+        manneger.startLoop();
     }
 
     // Tarjeta para cada avatar.

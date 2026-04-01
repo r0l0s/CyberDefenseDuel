@@ -40,6 +40,7 @@ public class DoubleEndedList<Object> extends List<Object> {
 			this.last.setNext(node);
 		}
 		this.last = node;
+		
 		this.size++;
 	}
 	
@@ -77,15 +78,14 @@ public class DoubleEndedList<Object> extends List<Object> {
 		Node<Object> node = this.getNode(pos);
 		Node<Object> last = this.getNode(pos-1);
 		
-		//If the delete is in the last position
+		//If the delete is in the first position
 		if (last == null) {
 			this.size--;
 			this.first = node.getNext();
 			return;
 		}
 		
-		//If the delete is in the first position
-		System.out.println();
+		//If the delete is in the last position
 		if (node.getNext()==null) {
 			this.last = last;
 			this.last.setNext(null);
