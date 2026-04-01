@@ -2,6 +2,7 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import org.json.*;
 
 public class Client {
     
@@ -9,54 +10,71 @@ public class Client {
     // can use them later to send messages to the server.
     private Socket socket;
     private DataOutputStream out;
-    
-    // We use a Thread to prevent blocking the JavaFX UI
-    public void Initialize(String UserName, String Password) {
-        System.out.println("Authenticating with" + UserName + " " + Password);
-        // 1. Create a new background Thread
-        Thread clientThread = new Thread(() -> {
-            try {
-                // 2. Connect to the server on localhost (127.0.0.1) at port 4000
-                System.out.println("Connecting to server...");
-                socket = new Socket("127.0.0.1", 4000);
-                out = new DataOutputStream(socket.getOutputStream());
-                
-                System.out.println("Connected to Server!");
-                out.writeUTF(UserName);
-                out.writeUTF(Password);
-                
-                // 3. Keep listening for console input (Temporary for testing)
-                // Note: In the final game, GameIU will send data, not the console.
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String line;
-                
-                // This loop blocks, but because it's in a separate thread, 
-                // the JavaFX window remains responsive!
-                while (!(line = br.readLine()).equals("End")) {
-                    out.writeUTF(line);
+    private DataInputStream in;
+
+    public void Login(String UserName, String Password){
+        SendAuthenticationRequest("Login", UserName, Password);
+    }
+
+    public void Register(String UserName, String Password){
+        SendAuthenticationRequest("Register", UserName, Password);
+    }
+
+    private void SendAuthenticationRequest(String Action, String UserName, String Password){
+        // Creating the JSON payload
+        JSONObject object = new JSONObject();
+        object.put("Action", Action);
+        object.put("UserName", UserName);
+        object.put("Password", Password);
+        String Payload = object.toString();
+
+        System.out.println("Attempting to " + Action + "with" + UserName);
+
+        // Starting the thread
+        Thread ClientThread = new Thread(() -> {
+            try{
+                if(socket == null || socket.isClosed()){
+                    System.out.println("Connecting to server...");
+                    socket = new Socket("127.0.0.1", 4000);
+                    out = new DataOutputStream(socket.getOutputStream());
+                    in = new DataInputStream(socket.getInputStream());
+                    System.out.println("Connected to server!");
                 }
-                
-                // Close resources when "End" is typed
-                closeConnection();
-                
-            } catch (IOException e) {
-                System.out.println("Failed to connect to server: " + e.getMessage());
-                // e.printStackTrace(); // Uncomment for full error trace
+                // Sending JSON packet to the server
+                out.writeUTF(Payload);
+
+                // Waiting for the server's reply
+                String ResponseLine = in.readUTF();
+                JSONObject Response = new JSONObject(ResponseLine);
+
+                System.out.println("Server replied: " + Response.getString("message"));
+
+                //Notification for the mediator
+                if (Response.getString("Status").equals("Success")){
+                    // Logic for a successful login/register
+                }
+                else{
+                    // Logic for an unsuccessful login/register
+                }
+            } catch (IOException | JSONException e){
+                System.out.println("Communication error: " + e.getMessage());
+                CloseConnection();
             }
         });
-        
-        // Start the thread running in the background
-        clientThread.start();
+        ClientThread.start();
+
     }
-    
-    // A helper method to cleanly close the connection later
-    public void closeConnection() {
-        try {
+
+    public void CloseConnection(){
+        try{
+            if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null && !socket.isClosed()) socket.close();
             System.out.println("Connection closed.");
-        } catch (IOException e) {
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
     }
+
 }

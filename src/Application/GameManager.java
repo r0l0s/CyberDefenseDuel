@@ -7,12 +7,12 @@ import javafx.application.Application;
 import network.Client;
 // This class should contain and initialize all components that make the game
 public class GameManager {
-    private static GameMediator Mediator;
+    private static GameMediator Mediator = new GameMediator();
 
     public static void main(String[] args){
         Mediator = new GameMediator();
 
-        network.Client client = new network.Client();
+        Client client = new network.Client();
         Mediator.SetClient(client);
 
         PlayerDataManager PDM = new PlayerDataManager();

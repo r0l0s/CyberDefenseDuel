@@ -19,16 +19,22 @@ public class GameMediator {
         this.MaybePlayer = Optional.ofNullable(PlayerRef);
     }
     public void SetPlayerDataManager(PlayerDataManager PlayerDataManagerRef){
-        this.MaybePlayerDataManager = Optional.ofNullable(PlayerDataManagerRef);
+        //this.MaybePlayerDataManager = Optional.ofNullable(PlayerDataManagerRef);
     }
     public void SetClient(Client ClientRef){
         this.MaybeClient = Optional.ofNullable(ClientRef);
     }
     // ---------------------------------------------------------------------------------------
 
-    public void StartClient(){
-        System.out.println("Starting Client");
-        MaybeClient.ifPresent(Client -> Client.Initialize("Eze","aaa"));
+
+    public void ClientLogin(String UserName, String Password){
+        System.out.println("Attempting client login procedure....");
+        MaybeClient.ifPresent(Client -> Client.Login(UserName, Password));
+    }
+
+    public void ClientRegister(String UserName, String Password){
+        System.out.println("Attempting client register procedure....");
+        MaybeClient.ifPresent(Client -> Client.Register(UserName, Password));
     }
 
 }

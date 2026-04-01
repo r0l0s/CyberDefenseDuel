@@ -37,7 +37,8 @@ public class GameIU extends Application {
     @Override
     public void start(Stage stage) {
 
-        this.Mediator = GameManager.getMediator();
+        System.out.println("Getting Mediator");
+        Mediator = GameManager.getMediator();
 
         instance = this;
         // Guardamos el stage (ventana) una vez y lo vamos reciclando entre pantallas.
@@ -135,8 +136,11 @@ public class GameIU extends Application {
                 return;
             }
             usuario = campoUsuario.getText().trim();
-            Mediator.StartClient();
             mostrarPantallaAvatar();
+
+            String UserName = campoUsuario.getText();
+            String Password = campoContrasena.getText();
+            Mediator.ClientLogin(UserName, Password);
         });
 
         // Simula registro rapido y continua igual que login.
@@ -149,6 +153,11 @@ public class GameIU extends Application {
             usuario = campoUsuario.getText().trim();
             mensaje.setText("Registro exitoso.");
             mensaje.setTextFill(Color.web("#86efac"));
+
+            String UserName = campoUsuario.getText();
+            String Password = campoContrasena.getText();
+            Mediator.ClientRegister(UserName, Password);
+
             mostrarPantallaAvatar();
         });
 
