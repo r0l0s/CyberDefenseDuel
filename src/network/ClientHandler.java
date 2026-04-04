@@ -26,63 +26,83 @@ public class ClientHandler implements Runnable {
             out = new DataOutputStream(socket.getOutputStream());
 
             String line;
-            // This loop now runs in a separate thread, so it doesn't block other clients!
             while (true) {
                 try {
                     line = in.readUTF();
-                    if (line.equals("End")) {
-                        break;
-                    }
-                    
-                    System.out.println("Received: " + line);
-                    
-                    try {
-                        JSONObject request = new JSONObject(line);
-                        
-                        // Using optString so it doesn't crash if "action" is missing
-                        String action = request.optString("Action");
-                        
-                        if (action != null && !action.isEmpty()) {
-                            String user = request.getString("UserName");
-                            String pass = request.getString("Password");
-                            
-                            JSONObject response = new JSONObject();
-                            
-                            if (action.equals("Login")) {
-                                boolean success = dbManager.loginUser(user, pass);
-                                response.put("status", success ? "success" : "fail");
-                                response.put("message", success ? "Login successful" : "Invalid credentials");
-                                if (success) loggedInUser = user;
-                                
-                            } else if (action.equals("Register")) {
-                                boolean success = dbManager.registerUser(user, pass);
-                                response.put("status", success ? "success" : "fail");
-                                response.put("message", success ? "Registered!" : "Username taken");
-                                if (success) loggedInUser = user;
-                                
-                            } else {
-                                response.put("status", "error");
-                                response.put("message", "Unknown action");
-                            }
-                            
-                            // Send the response back to the client
-                            out.writeUTF(response.toString());
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Invalid JSON format received or missing keys.");
-                    }
+                    if (line.equals("End")) break;
 
-                } catch (EOFException e) {
-                    // This happens if the client disconnects abruptly
-                    System.out.println("Client disconnected unexpectedly.");
-                    break;
+                    System.out.println("Received: " + line);
+                    JSONObject request = new JSONObject(line);
+                    String action = request.optString("action");
+
+                    switch (action) {
+                        case "login":
+                            handleLogin(request);
+                            break;
+                        case "register":
+                            handleRegister(request);
+                            break;
+                        case "get_config":
+                            handleInitialConfig();
+                            break;
+                        default:
+                            sendError("Unknown action");
+                            break;
+                    }
+                } catch (Exception e ) {
+                    System.out.println("Error processing request: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
             System.out.println("Connection error: " + e.getMessage());
-        } finally {
+        }   finally {
             closeConnection();
         }
+    }
+
+    // --- HELPER METHODS ---
+    private void handleLogin(JSONObject request) throws IOException {
+        String user = request.getString("userName");
+        String pass = request.getString("password");
+
+        boolean success = dbManager.loginUser(user, pass);
+        JSONObject response = new JSONObject();
+        response.put("action", "register");
+        response.put("status", success ? "success" : "fail");
+        response.put("message", success ? "Login Successful" : "Invalid Credentials");
+
+        if (success) {
+            loggedInUser = user;
+        }
+        out.writeUTF(response.toString());
+    }
+
+    private void handleRegister(JSONObject request) throws IOException {
+        String user = request.getString("userName");
+        String pass = request.getString("password");
+
+        boolean success = dbManager.registerUser(user, pass);
+        JSONObject response = new JSONObject();
+        response.put("action", "register");
+        response.put("status", success ? "success" : "fail");
+        response.put("message", success ? "Registered" : "Username Taken");
+
+        if (success) {
+            loggedInUser = user;
+        }
+        out.writeUTF(response.toString());
+    }
+
+    private void handleInitialConfig() throws IOException {
+        System.out.println("Sending initial configuration to " + loggedInUser);
+        out.writeUTF(dbManager.fetchConfigurationFile().toString());
+    }
+
+    private void sendError(String message) throws IOException {
+        JSONObject response = new JSONObject();
+        response.put("status", "error");
+        response.put("message", message);
+        out.writeUTF(response.toString());
     }
 
     private void closeConnection() {

@@ -1,80 +1,160 @@
+
+
 package network;
 
 import java.io.*;
 import java.net.*;
 import org.json.*;
+import java.util.function.Consumer;
+import javafx.application.Platform;
 
 public class Client {
-    
-    // We store the socket and output stream as fields so other methods 
-    // can use them later to send messages to the server.
     private Socket socket;
     private DataOutputStream out;
     private DataInputStream in;
+    private Thread listernerThread;
 
-    public void Login(String UserName, String Password){
-        SendAuthenticationRequest("Login", UserName, Password);
+    // Callbacks for the listener thread
+    private Consumer<Boolean> loginCallback;
+    private Consumer<Boolean> registerCallback;
+
+    // ==========================================================================
+    // CONNECTION AND LISTENER STARTUP
+    // ==========================================================================
+    public void Connect() {
+        if (socket != null && !socket.isClosed()) {
+            return; // Nothing happens because the socket is already connected
+        }
+        try {
+            System.out.println("Connecting to server...");
+            socket = new Socket("127.0.0.1", 4000);
+            out = new DataOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
+            System.out.println("Connected to server!");
+
+            startListening();
+        } catch (IOException e ) {
+            System.out.println("Failed to connect: " + e.getMessage());
+        }
     }
 
-    public void Register(String UserName, String Password){
-        SendAuthenticationRequest("Register", UserName, Password);
-    }
+    // ============================================================================
+    // RECEIVER (Background thread)
+    // ============================================================================
+    private void startListening() {
+        listernerThread = new Thread(() -> {
+            while (true) {
+                try {
+                    // Blocking wait: The thread pauses here until the server sends data
+                    String responseLine = in.readUTF();
+                    JSONObject response = new JSONObject(responseLine);
+                    System.out.println("Server sent: " + responseLine);
 
-    private void SendAuthenticationRequest(String Action, String UserName, String Password){
-        // Creating the JSON payload
-        JSONObject object = new JSONObject();
-        object.put("Action", Action);
-        object.put("UserName", UserName);
-        object.put("Password", Password);
-        String Payload = object.toString();
+                    // Using "action" for authentication replies / "type" for game data
+                    // The syntax is similar to the optional failure context in Verse
+                    String key = response.optString("action", response.optString("type"));
 
-        System.out.println("Attempting to " + Action + "with" + UserName);
+                    // This is the router
+                    switch (key) {
+                        case "login":
+                            handleLoginResponse(response);
+                            break;
 
-        // Starting the thread
-        Thread ClientThread = new Thread(() -> {
-            try{
-                if(socket == null || socket.isClosed()){
-                    System.out.println("Connecting to server...");
-                    socket = new Socket("127.0.0.1", 4000);
-                    out = new DataOutputStream(socket.getOutputStream());
-                    in = new DataInputStream(socket.getInputStream());
-                    System.out.println("Connected to server!");
+                        case "register":
+                            handleRegisterResponse(response);
+                            break;
+
+                        case "config":
+                            System.out.println("Received game configuration!");
+                            break;
+
+                        default:
+                            System.out.println("Received unknown message key " + key);
+                    }
+                } catch (IOException | JSONException e ) {
+                    System.out.println("Connection lost to server");
+                    closeConnection();
+                    break;
                 }
-                // Sending JSON packet to the server
-                out.writeUTF(Payload);
-
-                // Waiting for the server's reply
-                String ResponseLine = in.readUTF();
-                JSONObject Response = new JSONObject(ResponseLine);
-
-                System.out.println("Server replied: " + Response.getString("message"));
-
-                //Notification for the mediator
-                if (Response.getString("Status").equals("Success")){
-                    // Logic for a successful login/register
-                }
-                else{
-                    // Logic for an unsuccessful login/register
-                }
-            } catch (IOException | JSONException e){
-                System.out.println("Communication error: " + e.getMessage());
-                CloseConnection();
             }
         });
-        ClientThread.start();
-
+        listernerThread.start();
     }
 
-    public void CloseConnection(){
-        try{
+    // --- Response Handlers ---
+    private void handleLoginResponse(JSONObject response){
+        boolean isSuccess = response.getString("status").equals("success");
+        System.out.println(response.getString("message"));
+
+        if (loginCallback != null) {
+            Consumer<Boolean> callbackToRun = this.loginCallback;
+            this.loginCallback = null;
+            Platform.runLater(() -> callbackToRun.accept(isSuccess));
+        }
+    }
+
+    private void handleRegisterResponse(JSONObject response) {
+        boolean isSuccess = response.getString("status").equals("success");
+        System.out.println(response.getString("message"));
+
+        if (registerCallback != null) {
+            Consumer<Boolean> callbackToRun = this.registerCallback;
+            this.registerCallback = null;
+            Platform.runLater(() -> callbackToRun.accept(isSuccess));
+        }
+    }
+
+    // ============================================================================
+    // SENDERS (Main UI thread)
+    // ============================================================================
+    public void Login(String userName, String password, Consumer<Boolean> onResult) {
+        Connect();
+        this.loginCallback = onResult;
+
+        JSONObject object = new JSONObject();
+        object.put("action", "login");
+        object.put("userName", userName);
+        object.put("password", password);
+
+        sendData(object.toString());
+    }
+
+    public void Register(String userName, String password, Consumer<Boolean> onResult) {
+        Connect();
+        this.registerCallback = onResult;
+
+        JSONObject object = new JSONObject();
+        object.put("action", "register");
+        object.put("userName", userName);
+        object.put("password", password);
+
+        sendData(object.toString());
+    }
+
+    public void getConfiguration(){
+        JSONObject object = new JSONObject();
+        object.put("action", "get_config");
+        sendData(object.toString());
+    }
+
+    private void sendData(String payload) {
+        try {
+            if (out != null) {
+                out.writeUTF(payload);
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to send: " + e.getMessage());
+        }
+    }
+
+    public void closeConnection() {
+        try {
             if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null && !socket.isClosed()) socket.close();
-            System.out.println("Connection closed.");
-        }
-        catch (IOException e){
+            System.out.println("Connection closed");
+        } catch (IOException e ) {
             e.printStackTrace();
         }
     }
-
 }

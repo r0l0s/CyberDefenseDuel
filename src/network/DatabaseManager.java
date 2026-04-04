@@ -7,8 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DatabaseManager {
-    private static final String DB_FILE = "database.json";
+    // This will target the file inside src/network regardless of where you run the server from.
+    private static final String DB_FILE = "src" + File.separator + "network" + File.separator + "database.json";
     private JSONArray usersArray;
+    private InitialConfigManager configManager = new InitialConfigManager();
 
     public DatabaseManager() {
         loadDatabase();
@@ -69,9 +71,14 @@ public class DatabaseManager {
         newUser.put("Password", password); // PDF Recommends hashing this later!
         newUser.put("Score", 0);
         newUser.put("GamesPlayed", 0);
-        
+
+
         usersArray.put(newUser);
         saveDatabase(); // Persist changes to disk
         return true;
+    }
+
+    public synchronized JSONObject fetchConfigurationFile(){
+        return configManager.getInitConfig();
     }
 }

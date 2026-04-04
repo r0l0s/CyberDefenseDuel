@@ -1,6 +1,38 @@
-[{
-    "Score": 0,
-    "UserName": "Tony",
-    "Password": "Pass",
-    "GamesPlayed": 0
-}]
+[
+    {
+        "Score": 0,
+        "UserName": "Molly",
+        "Password": "Red",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Marcos",
+        "Password": "Marcos",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Mike",
+        "Password": "Password",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Tolip",
+        "Password": "passman",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "MikeJon",
+        "Password": "Jon",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "jhon",
+        "Password": "pass",
+        "GamesPlayed": 0
+    }
+]
