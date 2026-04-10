@@ -1,5 +1,6 @@
 package Game;
 
+import GameData.GameMediator;
 import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 import estruc_datos.StackList;
@@ -17,6 +18,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class Mannager {
+
+    private GameMediator Mediator;
+
+
     // Listado de enemigos para el juego
     private DoubleEndedList<Enemy> enemyList;
     // Listado de balas y proyectiles para el juego.
@@ -41,7 +46,11 @@ public class Mannager {
     int speedAddPerLevel;
     int[] damageByType;
 
-    public Mannager(BorderPane root) {
+    public Mannager(BorderPane root, GameMediator Mediator) {
+
+        this.Mediator = Mediator;
+        Mediator.SetMannager(this);
+
         configureParams();
         // Agregamos los componentes al juego:
         player.setHeath(initialHP);
@@ -282,6 +291,7 @@ public class Mannager {
 
     private void configureParams(){
         //get data from json
+        Mediator.getInitialConfiguration();
         damageByType = new int[]{ 10, 20, 10 };
         initialHP = 100;
         scorePerKill = 10;

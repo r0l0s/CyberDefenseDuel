@@ -3,7 +3,7 @@ package network;
 import org.json.JSONObject;
 public class InitialConfigManager {
 
-    private String type = "CONFIG";
+    private String action = "CONFIG";
     private int initialHp = 100;
     private double baseSpawnRate = 1.0;
     private double baseAttackSpeed = 2.0;
@@ -26,7 +26,7 @@ public class InitialConfigManager {
         damageByType.put("CRED", credDamage);
 
         JSONObject initialConfig = new JSONObject();
-        initialConfig.put("type", type);
+        initialConfig.put("action", action);
         initialConfig.put("initialHp", initialHp);
         initialConfig.put("baseSpawnRate", baseSpawnRate);
         initialConfig.put("baseAttackSpeed", baseAttackSpeed);

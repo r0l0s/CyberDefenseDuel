@@ -128,7 +128,7 @@ public class GameIU extends Application {
         cajaCentro.setPadding(new Insets(20, 120, 20, 120));
         root.setCenter(cajaCentro);
 
-        // Si todo esta bien, pasamos a seleccionar avatar (si se escribio algo).
+        // --- LOGIN BUTTON ---
         botonLogin.setOnAction(e -> {
             if (estaVacio(campoUsuario.getText()) || estaVacio(campoContrasena.getText())) {
                 mensaje.setText("Completa usuario y contrasena.");
@@ -136,14 +136,27 @@ public class GameIU extends Application {
                 return;
             }
             usuario = campoUsuario.getText().trim();
-            mostrarPantallaAvatar();
-
             String UserName = campoUsuario.getText();
             String Password = campoContrasena.getText();
-            Mediator.ClientLogin(UserName, Password);
+
+            // Disabling the button for loading...
+            botonLogin.setText("Cargando...");
+            botonLogin.setDisable(true);
+
+            Mediator.ClientLogin(UserName, Password, (isSuccess) -> {
+                // This runs only when the server replies to the mediator
+                botonLogin.setText("Login");
+                botonLogin.setDisable(false);
+                if (isSuccess){
+                    mostrarPantallaAvatar();
+                } else {
+                    mensaje.setText("Credenciales inválidos");
+                    mensaje.setTextFill(Color.web("#fecaca"));
+                }
+            });
         });
 
-        // Simula registro rapido y continua igual que login.
+        // --- REGISTER BUTTON ---
         botonRegistro.setOnAction(e -> {
             if (estaVacio(campoUsuario.getText()) || estaVacio(campoContrasena.getText())) {
                 mensaje.setText("Completa usuario y contrasena para registrarte.");
@@ -156,9 +169,24 @@ public class GameIU extends Application {
 
             String UserName = campoUsuario.getText();
             String Password = campoContrasena.getText();
-            Mediator.ClientRegister(UserName, Password);
 
-            mostrarPantallaAvatar();
+            botonRegistro.setText("Cargando...");
+            botonRegistro.setDisable(true);
+
+            Mediator.ClientRegister(UserName, Password, (isSuccess) -> {
+                botonRegistro.setText("Register");
+                botonRegistro.setDisable(false);
+
+                if (isSuccess) {
+                    mensaje.setText("Registro exitoso");
+                    mensaje.setTextFill(Color.web("#86efac"));
+                    mostrarPantallaAvatar();
+                } else {
+                    mensaje.setText("El usuario ya existe");
+                    mensaje.setTextFill(Color.web("#fecaca"));
+                }
+            });
+
         });
 
         Scene escena = new Scene(root, 1200, 760);
@@ -362,7 +390,8 @@ public class GameIU extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
         root.setPadding(new Insets(24));
-		Mannager manneger = new Mannager(root);
+
+		Mannager manneger = new Mannager(root, Mediator);
 
         Scene escena = new Scene(root,1200, 760);
         ventana.setScene(escena);

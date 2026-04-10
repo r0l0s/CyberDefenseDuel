@@ -34,5 +34,17 @@
         "UserName": "jhon",
         "Password": "pass",
         "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "MikeLopez",
+        "Password": "Pass",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Toliop200",
+        "Password": "Pass",
+        "GamesPlayed": 0
     }
 ]

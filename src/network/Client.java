@@ -64,8 +64,9 @@ public class Client {
                             handleRegisterResponse(response);
                             break;
 
-                        case "config":
+                        case "CONFIG":
                             System.out.println("Received game configuration!");
+                            handleInitialConfigurationResponse(response);
                             break;
 
                         default:
@@ -102,6 +103,10 @@ public class Client {
             this.registerCallback = null;
             Platform.runLater(() -> callbackToRun.accept(isSuccess));
         }
+    }
+
+    private void handleInitialConfigurationResponse(JSONObject response){
+
     }
 
     // ============================================================================
