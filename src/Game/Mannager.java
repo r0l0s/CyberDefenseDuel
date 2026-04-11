@@ -1,5 +1,10 @@
 package Game;
 
+import java.io.IOException;
+
+import org.json.JSONObject;
+
+import GameData.GameMediator;
 import estruc_datos.DoubleEndedList;
 import estruc_datos.LinkedList;
 import estruc_datos.StackList;
@@ -17,6 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class Mannager {
+
+    private GameMediator Mediator;
+
+
     // Listado de enemigos para el juego
     private DoubleEndedList<Enemy> enemyList;
     // Listado de balas y proyectiles para el juego.
@@ -33,16 +42,22 @@ public class Mannager {
     final AnimationTimer gameLoop;
     //Parámetros pasados por el config:
     int initialHP;
-    int baseSpawnRate;
-    int baseAttackSpeed;
+    double baseSpawnRate;
+    double baseAttackSpeed;
     int scorePerKill;
     int difficultyStepScore;
-    int spawnMultiplierPerLevel;
-    int speedAddPerLevel;
+    double spawnMultiplierPerLevel;
+    double speedAddPerLevel;
     int[] damageByType;
 
-    public Mannager(BorderPane root) {
-        configureParams();
+    public Mannager(BorderPane root, GameMediator Mediator, JSONObject config) {
+
+        this.Mediator = Mediator;
+        Mediator.SetMannager(this);
+
+        configureParams(config);
+        //Mediator.getInitialConfiguration();
+
         // Agregamos los componentes al juego:
         player.setHeath(initialHP);
         root.getChildren().add(player.get_colider());
@@ -280,12 +295,24 @@ public class Mannager {
 
     }
 
-    private void configureParams(){
-        //get data from json
-        damageByType = new int[]{ 10, 20, 10 };
-        initialHP = 100;
-        scorePerKill = 10;
-        difficultyStepScore = 100;
+    private void configureParams(JSONObject Configuration){
+        
+        try{
+            initialHP = Configuration.getInt("initialHp");
+            baseSpawnRate = Configuration.getDouble("baseSpawnRate");
+            baseAttackSpeed = Configuration.getDouble("baseAttackSpeed");
+            scorePerKill = Configuration.getInt("scorePerKill");
+            difficultyStepScore = Configuration.getInt("difficultyStepScore");
+            spawnMultiplierPerLevel = Configuration.getDouble("spawnMultiplierPerLevel");
+            speedAddPerLevel = Configuration.getDouble("speedAddPerLevel");
+            damageByType = new int[]{ 10, 20, 10 };
+
+        } catch(Exception e ){
+            System.out.println("Error in configuration file");
+            e.printStackTrace();
+
+        }
+        
     }
 
     public void startLoop(){

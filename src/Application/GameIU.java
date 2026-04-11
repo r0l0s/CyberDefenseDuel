@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Game.Mannager;
 import GameData.GameMediator;
+import org.json.JSONObject;
 
 public class GameIU extends Application {
 
@@ -37,7 +38,8 @@ public class GameIU extends Application {
     @Override
     public void start(Stage stage) {
 
-        this.Mediator = GameManager.getMediator();
+        System.out.println("Getting Mediator");
+        Mediator = GameManager.getMediator();
 
         instance = this;
         // Guardamos el stage (ventana) una vez y lo vamos reciclando entre pantallas.
@@ -127,7 +129,7 @@ public class GameIU extends Application {
         cajaCentro.setPadding(new Insets(20, 120, 20, 120));
         root.setCenter(cajaCentro);
 
-        // Si todo esta bien, pasamos a seleccionar avatar (si se escribio algo).
+        // --- LOGIN BUTTON ---
         botonLogin.setOnAction(e -> {
             if (estaVacio(campoUsuario.getText()) || estaVacio(campoContrasena.getText())) {
                 mensaje.setText("Completa usuario y contrasena.");
@@ -135,11 +137,27 @@ public class GameIU extends Application {
                 return;
             }
             usuario = campoUsuario.getText().trim();
-            Mediator.StartClient();
-            mostrarPantallaAvatar();
+            String UserName = campoUsuario.getText();
+            String Password = campoContrasena.getText();
+
+            // Disabling the button for loading...
+            botonLogin.setText("Cargando...");
+            botonLogin.setDisable(true);
+
+            Mediator.ClientLogin(UserName, Password, (isSuccess) -> {
+                // This runs only when the server replies to the mediator
+                botonLogin.setText("Login");
+                botonLogin.setDisable(false);
+                if (isSuccess){
+                    mostrarPantallaAvatar();
+                } else {
+                    mensaje.setText("Credenciales inválidos");
+                    mensaje.setTextFill(Color.web("#fecaca"));
+                }
+            });
         });
 
-        // Simula registro rapido y continua igual que login.
+        // --- REGISTER BUTTON ---
         botonRegistro.setOnAction(e -> {
             if (estaVacio(campoUsuario.getText()) || estaVacio(campoContrasena.getText())) {
                 mensaje.setText("Completa usuario y contrasena para registrarte.");
@@ -149,7 +167,27 @@ public class GameIU extends Application {
             usuario = campoUsuario.getText().trim();
             mensaje.setText("Registro exitoso.");
             mensaje.setTextFill(Color.web("#86efac"));
-            mostrarPantallaAvatar();
+
+            String UserName = campoUsuario.getText();
+            String Password = campoContrasena.getText();
+
+            botonRegistro.setText("Cargando...");
+            botonRegistro.setDisable(true);
+
+            Mediator.ClientRegister(UserName, Password, (isSuccess) -> {
+                botonRegistro.setText("Register");
+                botonRegistro.setDisable(false);
+
+                if (isSuccess) {
+                    mensaje.setText("Registro exitoso");
+                    mensaje.setTextFill(Color.web("#86efac"));
+                    mostrarPantallaAvatar();
+                } else {
+                    mensaje.setText("El usuario ya existe");
+                    mensaje.setTextFill(Color.web("#fecaca"));
+                }
+            });
+
         });
 
         Scene escena = new Scene(root, 1200, 760);
@@ -331,7 +369,7 @@ public class GameIU extends Application {
 
         atras.setOnAction(e -> mostrarPantallaAvatar());
         // Solo confirma visualmente, no lanza gameplay todavia.
-        iniciar.setOnAction(e -> mostrarPantallaGame());//seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
+        iniciar.setOnAction(e -> mostrarPantallaLoading());//seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
 
         HBox acciones = new HBox(14, atras, iniciar);
         acciones.setAlignment(Pos.CENTER_RIGHT);
@@ -348,12 +386,35 @@ public class GameIU extends Application {
         ventana.setScene(escena);
     }
 
+    private void mostrarPantallaLoading() {
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47)");
+
+        Label loadingLabel = new Label("Obteniendo Configuracion Inicial...");
+        loadingLabel.setTextFill(Color.web("#f8fafc"));
+        loadingLabel.setFont(Font.font("Segoe UI", 32));
+
+        VBox centerBox = new VBox(loadingLabel);
+        centerBox.setAlignment(Pos.CENTER);
+        root.setCenter(centerBox);
+
+        Scene escena = new Scene(root, 1200, 760);
+        ventana.setScene(escena);
+
+        // Se pide la configuracion
+        // No se ejecuta hasta que el cliente reciba la respuesta
+        Mediator.getInitialConfiguration(config -> {
+            mostrarPantallaGame(config);
+        });
+    }
+
     // 4) Pantalla de juego.
-    private void mostrarPantallaGame(){
+    private void mostrarPantallaGame(JSONObject config){
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
         root.setPadding(new Insets(24));
-		Mannager manneger = new Mannager(root);
+
+		Mannager manneger = new Mannager(root, Mediator, config);
 
         Scene escena = new Scene(root,1200, 760);
         ventana.setScene(escena);
