@@ -95,7 +95,6 @@ public class ClientHandler implements Runnable {
 
     private void handleInitialConfig() throws IOException {
         System.out.println("Sending initial configuration to " + loggedInUser);
-
         out.writeUTF(dbManager.fetchConfigurationFile().toString());
     }
 

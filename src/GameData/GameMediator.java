@@ -49,9 +49,10 @@ public class GameMediator {
                 () -> onResult.accept(false)); // Same logic as ClientLogin
     }
 
-    public void getInitialConfiguration(){
+    public void getInitialConfiguration(Consumer<JSONObject> onResult){
         MaybeClient.ifPresent(
-                Client -> Client.getConfiguration());
+                Client -> Client.getConfiguration(onResult));
     }
+
 
 }

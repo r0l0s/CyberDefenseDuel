@@ -1,50 +1,38 @@
 [
     {
         "Score": 0,
-        "UserName": "Molly",
-        "Password": "Red",
+        "UserName": "user",
+        "Password": "user",
         "GamesPlayed": 0
     },
     {
         "Score": 0,
-        "UserName": "Marcos",
-        "Password": "Marcos",
+        "UserName": "po",
+        "Password": "Pass",
         "GamesPlayed": 0
     },
     {
         "Score": 0,
-        "UserName": "Mike",
-        "Password": "Password",
-        "GamesPlayed": 0
-    },
-    {
-        "Score": 0,
-        "UserName": "Tolip",
-        "Password": "passman",
-        "GamesPlayed": 0
-    },
-    {
-        "Score": 0,
-        "UserName": "MikeJon",
-        "Password": "Jon",
-        "GamesPlayed": 0
-    },
-    {
-        "Score": 0,
-        "UserName": "jhon",
+        "UserName": "Pi",
         "Password": "pass",
         "GamesPlayed": 0
     },
     {
         "Score": 0,
-        "UserName": "MikeLopez",
-        "Password": "Pass",
+        "UserName": "lo",
+        "Password": "pad",
         "GamesPlayed": 0
     },
     {
         "Score": 0,
-        "UserName": "Toliop200",
-        "Password": "Pass",
+        "UserName": "ko",
+        "Password": "ko",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "marl",
+        "Password": "pass",
         "GamesPlayed": 0
     }
 ]

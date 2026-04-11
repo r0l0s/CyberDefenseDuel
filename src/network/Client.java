@@ -7,6 +7,7 @@ import java.net.*;
 import org.json.*;
 import java.util.function.Consumer;
 import javafx.application.Platform;
+import GameData.GameMediator;
 
 public class Client {
     private Socket socket;
@@ -17,6 +18,14 @@ public class Client {
     // Callbacks for the listener thread
     private Consumer<Boolean> loginCallback;
     private Consumer<Boolean> registerCallback;
+    private Consumer<JSONObject> configCallback;
+
+    // Mediator
+    private GameMediator mediator;
+
+    public Client(GameMediator mediator){
+        this.mediator = mediator;
+    }
 
     // ==========================================================================
     // CONNECTION AND LISTENER STARTUP
@@ -106,7 +115,13 @@ public class Client {
     }
 
     private void handleInitialConfigurationResponse(JSONObject response){
-
+        System.out.println("Received Configuration file");
+        if (configCallback != null) {
+            Consumer<JSONObject> callbackToRun = this.configCallback;
+            this.configCallback = null;
+            Platform.runLater(() -> callbackToRun.accept(response));
+        }
+        //mediator.setConfiguration(response);
     }
 
     // ============================================================================
@@ -136,7 +151,8 @@ public class Client {
         sendData(object.toString());
     }
 
-    public void getConfiguration(){
+    public void getConfiguration(Consumer<JSONObject> onResult){
+        this.configCallback = onResult;
         JSONObject object = new JSONObject();
         object.put("action", "get_config");
         sendData(object.toString());

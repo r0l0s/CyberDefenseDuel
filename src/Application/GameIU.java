@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Game.Mannager;
 import GameData.GameMediator;
+import org.json.JSONObject;
 
 public class GameIU extends Application {
 
@@ -368,7 +369,7 @@ public class GameIU extends Application {
 
         atras.setOnAction(e -> mostrarPantallaAvatar());
         // Solo confirma visualmente, no lanza gameplay todavia.
-        iniciar.setOnAction(e -> mostrarPantallaGame());//seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
+        iniciar.setOnAction(e -> mostrarPantallaLoading());//seleccionado.setText("Selected map: " + mapaElegido + " (ready)"));
 
         HBox acciones = new HBox(14, atras, iniciar);
         acciones.setAlignment(Pos.CENTER_RIGHT);
@@ -385,13 +386,35 @@ public class GameIU extends Application {
         ventana.setScene(escena);
     }
 
+    private void mostrarPantallaLoading() {
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47)");
+
+        Label loadingLabel = new Label("Obteniendo Configuracion Inicial...");
+        loadingLabel.setTextFill(Color.web("#f8fafc"));
+        loadingLabel.setFont(Font.font("Segoe UI", 32));
+
+        VBox centerBox = new VBox(loadingLabel);
+        centerBox.setAlignment(Pos.CENTER);
+        root.setCenter(centerBox);
+
+        Scene escena = new Scene(root, 1200, 760);
+        ventana.setScene(escena);
+
+        // Se pide la configuracion
+        // No se ejecuta hasta que el cliente reciba la respuesta
+        Mediator.getInitialConfiguration(config -> {
+            mostrarPantallaGame(config);
+        });
+    }
+
     // 4) Pantalla de juego.
-    private void mostrarPantallaGame(){
+    private void mostrarPantallaGame(JSONObject config){
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
         root.setPadding(new Insets(24));
 
-		Mannager manneger = new Mannager(root, Mediator);
+		Mannager manneger = new Mannager(root, Mediator, config);
 
         Scene escena = new Scene(root,1200, 760);
         ventana.setScene(escena);
