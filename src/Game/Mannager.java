@@ -50,6 +50,8 @@ public class Mannager {
     double speedAddPerLevel;
     int[] damageByType;
 
+    private boolean isGameOver = false;
+
     public Mannager(BorderPane root, GameMediator Mediator, JSONObject config) {
 
         this.Mediator = Mediator;
@@ -270,9 +272,13 @@ public class Mannager {
                 }
                 // endregion
 
-                if (player.getHealth() <= 0) {
-                    root.getChildren().remove(player.get_colider());
+                // Lugar donde se detecta un game over ------------------------------------------------------
+                if (player.getHealth() <= 0 && !isGameOver) {
+                    isGameOver = true;
+                    this.stop();
+                    Mediator.SetGameOver();
                 }
+                // ------------------------------------------------------------------------------------------
 
                 if (score > difficultyStepScore){
                     lbl_level.setText("Level: "+ ++actual_level);

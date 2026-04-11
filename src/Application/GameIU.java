@@ -40,6 +40,7 @@ public class GameIU extends Application {
 
         System.out.println("Getting Mediator");
         Mediator = GameManager.getMediator();
+        Mediator.SetGameUI(this);
 
         instance = this;
         // Guardamos el stage (ventana) una vez y lo vamos reciclando entre pantallas.
@@ -406,6 +407,22 @@ public class GameIU extends Application {
         Mediator.getInitialConfiguration(config -> {
             mostrarPantallaGame(config);
         });
+    }
+
+    public void mostrarPantallaGameOver() {
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47)");
+
+        Label loadingLabel = new Label("GAME OVER");
+        loadingLabel.setTextFill(Color.web("#f8fafc"));
+        loadingLabel.setFont(Font.font("Segoe UI", 32));
+
+        VBox centerBox = new VBox(loadingLabel);
+        centerBox.setAlignment(Pos.CENTER);
+        root.setCenter(centerBox);
+
+        Scene escena = new Scene(root, 1200, 760);
+        ventana.setScene(escena);
     }
 
     // 4) Pantalla de juego.

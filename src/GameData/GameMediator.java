@@ -7,8 +7,8 @@ import Game.Mannager;
 import Game.Player;
 import network.Client;
 import org.json.JSONObject;
-
 import java.util.function.Consumer;
+import Application.GameIU;
 
 // This class is the hub of communication for all the other classes
 // that establish the overall player logic system
@@ -18,6 +18,7 @@ public class GameMediator {
     private Optional<PlayerDataManager> MaybePlayerDataManager = Optional.empty();
     private Optional<Client> MaybeClient = Optional.empty();
     private Optional<Mannager> MaybeMannager = Optional.empty();
+    private Optional<GameIU> MaybeGameIU = Optional.empty();
 
 
     // These methods are to set each member for the mediator ---------------------------------
@@ -30,6 +31,11 @@ public class GameMediator {
     public void SetClient(Client ClientRef){
         this.MaybeClient = Optional.ofNullable(ClientRef);
     }
+
+    public void SetGameUI(GameIU GameUIRef) {
+        this.MaybeGameIU = Optional.ofNullable(GameUIRef);
+    }
+
     // ---------------------------------------------------------------------------------------
 
 
@@ -52,6 +58,11 @@ public class GameMediator {
     public void getInitialConfiguration(Consumer<JSONObject> onResult){
         MaybeClient.ifPresent(
                 Client -> Client.getConfiguration(onResult));
+    }
+
+    public void SetGameOver() {
+        MaybeGameIU.ifPresent(
+            GameIU -> GameIU.mostrarPantallaGameOver());
     }
 
 
