@@ -7,6 +7,11 @@ public class StackList<Object> extends List<Object> {
 		super(data);
 		// TODO Auto-generated constructor stub
 	}
+
+	public StackList() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
 	//Get methods:
 	@SuppressWarnings("unchecked")

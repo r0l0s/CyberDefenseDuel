@@ -23,9 +23,26 @@ public class CircleList<Object> extends DoubleEndedList<Object> {
 	}
 
 	public void delete(int pos){
-		//printAll();
-		super.delete(pos);
+		Node<Object> node = this.getNode(pos);
+		Node<Object> last = this.getNode(pos-1);
+		
+		//If the delete is in the first position
+		if (last == null) {
+			this.size--;
+			this.first = node.getNext();
+			return;
+		}
+		
+		//If the delete is in the last position
+		if (node.getNext()==first) {
+			this.last = last;
+		}else {
+			//If the delete is in any other place
+			last.setNext(node.getNext());
+		}
+		
 		this.last.setNext(this.first);
+		this.size--;
 	}
 	
 	//Quitar este método

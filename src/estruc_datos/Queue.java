@@ -10,8 +10,14 @@ public class Queue {
 		this.queue = new int[size];
 		
 		this.queue[0] = data;
+		index++;
 	}
 	
+	public Queue(int size){
+		this.peek = size;
+		this.queue = new int[size];
+	}
+
 	public void enqueue(int data) {
 		this.index++;
 		if (this.index == this.peek) {

@@ -10,8 +10,14 @@ public class Stack {
 		this.stack = new int[size];
 		
 		this.stack[0] = data;
+		index++;
 	}
 	
+	public Stack(int size){
+		this.top = size;
+		this.stack = new int[size];
+	}
+
 	public void push(int data) {
 		this.index++;
 		if (this.index == this.top) {
