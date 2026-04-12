@@ -29,7 +29,9 @@ public class GameIU extends Application {
     private Stage ventana;
     private String usuario = "";
     private String avatarElegido = "Captain Firewall";
+    private int sel_avatarIndex = 0;
     private String mapaElegido = "Data Center Dojo";
+    private int sel_mapIndex = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -256,6 +258,7 @@ public class GameIU extends Application {
         // Cada click cambia avatar y resalta solo una tarjeta.
         avatar1.setOnMouseClicked(e -> {
             avatarElegido = "Captain Firewall";
+            sel_avatarIndex = 0;
             seleccionado.setText("Selected: " + avatarElegido);
             avatar1.setStyle(estiloTarjetaSeleccionada());
             avatar2.setStyle(estiloTarjetaNormal());
@@ -266,6 +269,7 @@ public class GameIU extends Application {
 
         avatar2.setOnMouseClicked(e -> {
             avatarElegido = "Byte Ninja";
+            sel_avatarIndex = 1;
             seleccionado.setText("Selected: " + avatarElegido);
             avatar1.setStyle(estiloTarjetaNormal());
             avatar2.setStyle(estiloTarjetaSeleccionada());
@@ -276,6 +280,7 @@ public class GameIU extends Application {
 
         avatar3.setOnMouseClicked(e -> {
             avatarElegido = "Malware Muncher";
+            sel_avatarIndex = 2;
             seleccionado.setText("Selected: " + avatarElegido);
             avatar1.setStyle(estiloTarjetaNormal());
             avatar2.setStyle(estiloTarjetaNormal());
@@ -286,6 +291,7 @@ public class GameIU extends Application {
 
         avatar4.setOnMouseClicked(e -> {
             avatarElegido = "Crypto Llama";
+            sel_avatarIndex = 3;
             seleccionado.setText("Selected: " + avatarElegido);
             avatar1.setStyle(estiloTarjetaNormal());
             avatar2.setStyle(estiloTarjetaNormal());
@@ -296,6 +302,7 @@ public class GameIU extends Application {
 
         avatar5.setOnMouseClicked(e -> {
             avatarElegido = "Packet Pirate";
+            sel_avatarIndex = 4;
             seleccionado.setText("Selected: " + avatarElegido);
             avatar1.setStyle(estiloTarjetaNormal());
             avatar2.setStyle(estiloTarjetaNormal());
@@ -350,6 +357,7 @@ public class GameIU extends Application {
 
         dojoCard.setOnMouseClicked(e -> {
             mapaElegido = "Data Center Dojo";
+            sel_mapIndex = 0;
             seleccionado.setText("Selected map: " + mapaElegido);
             dojoCard.setStyle(estiloTarjetaSeleccionada() + "-fx-background-color: linear-gradient(to bottom right, #0ea5e9, #1d4ed8);");
             carnivalCard.setStyle(estiloTarjetaNormal() + "-fx-background-color: linear-gradient(to bottom right, #f97316, #db2777);");
@@ -357,6 +365,7 @@ public class GameIU extends Application {
 
         carnivalCard.setOnMouseClicked(e -> {
             mapaElegido = "Packet Bay Carnival";
+            sel_mapIndex = 1;
             seleccionado.setText("Selected map: " + mapaElegido);
             carnivalCard.setStyle(estiloTarjetaSeleccionada() + "-fx-background-color: linear-gradient(to bottom right, #f97316, #db2777);");
             dojoCard.setStyle(estiloTarjetaNormal() + "-fx-background-color: linear-gradient(to bottom right, #0ea5e9, #1d4ed8);");
@@ -430,10 +439,20 @@ public class GameIU extends Application {
     // 4) Pantalla de juego.
     private void mostrarPantallaGame(JSONObject config){
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
+        switch (sel_mapIndex) {
+            case 0:
+                root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
+                break;
+            case 1:
+                root.setStyle("-fx-background-color: linear-gradient(to bottom right, #15042b, #611768, #7e134e);");
+                break;
+            default:
+                root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
+                break;
+        }
         root.setPadding(new Insets(24));
 
-		Mannager manneger = new Mannager(root, Mediator, config);
+		Mannager manneger = new Mannager(root, Mediator, config,sel_avatarIndex);
 
         Scene escena = new Scene(root,1200, 760);
         ventana.setScene(escena);

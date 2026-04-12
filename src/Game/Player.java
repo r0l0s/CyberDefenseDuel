@@ -15,9 +15,10 @@ public class Player extends GameObject{
 	//Player important vars
 	private float x;
 	private float y;
-	//Player stats: Life, movement
+	//Player stats: Life, movement, avatar
 	private int health;
 	private int vel;	
+	private int avatar;
 	//Stacks for available bullets
 	public StackList<Bullet> free_bullets;
 	private DoubleEndedList<Bullet> used_bullets;
@@ -26,7 +27,7 @@ public class Player extends GameObject{
 
 	//Constructor
 	private Player(float x, float y) {
-		super(75.0f,75.0f,2);
+		super(75.0f,75.0f,10);
 		//Configuring the X and Y position of player and its velocity.
 		this.colider.setX(x);
 		this.x = x;
@@ -41,8 +42,16 @@ public class Player extends GameObject{
 			this.free_bullets.push(new Bullet(this.x,this.y,-1));
 		}
 		//Configuring sprite
-		this.sprites[0] = new Image("img/nave0.png");
-		this.sprites[1] = new Image("img/nave1.png");
+		this.sprites[0] = new Image("img/n1-1.png");
+		this.sprites[1] = new Image("img/n2-1.png");
+		this.sprites[2] = new Image("img/n3-1.png");
+		this.sprites[3] = new Image("img/n4-1.png");
+		this.sprites[4] = new Image("img/n5-1.png");
+		this.sprites[6] = new Image("img/n2-2.png");
+		this.sprites[7] = new Image("img/n3-2.png");
+		this.sprites[8] = new Image("img/n4-2.png");
+		this.sprites[9] = new Image("img/n5-2.png");
+		this.sprites[5] = new Image("img/n1-2.png");
 		this.colider.setFill(new ImagePattern(sprites[0]));
 	}
 	
@@ -79,15 +88,19 @@ public class Player extends GameObject{
 		return this.sprites[pos];
 	}
 
+	public void set_avatar(int val){
+		avatar = val;
+	}
+
 	//Change the position of the player on the X axis.
 	public void move(int dir) {
 		double newX = this.colider.getTranslateX() + (dir * this.vel);
 		this.colider.setTranslateX(newX);
 		
 		if (dir == 0){
-			this.colider.setFill(new ImagePattern(sprites[0]));	
+			this.colider.setFill(new ImagePattern(sprites[avatar]));	
 		}else{
-			this.colider.setFill(new ImagePattern(sprites[1]));	
+			this.colider.setFill(new ImagePattern(sprites[avatar+5]));	
 		}
 	}
 

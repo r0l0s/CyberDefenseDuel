@@ -23,6 +23,9 @@ public class Bullet extends GameObject{
 		this.sprites[0] = new Image("img/b0.png");
 		this.sprites[1] = new Image("img/m0.png");
 		this.sprites[2] = new Image("img/c0.png");
+		this.sprites[3] = new Image("img/b1.png");
+		this.sprites[4] = new Image("img/m1.png");
+		this.sprites[5] = new Image("img/c1.png");
 	}
 	
 	public void set_damage(int[]values){
@@ -44,9 +47,16 @@ public class Bullet extends GameObject{
 
 	public void setType(int type){
 		this.type = type;
+		if (this.damage[0] == 0){
+			type += 3;
+		}
+
 		get_colider().setFill(new ImagePattern(sprites[type]));
 	}
 
+	public void setVelocity(double vel){
+		this.vel = (int) vel;;
+	}
 
 	//Change the position of the bullet on the Y axis.
 	public void move() {
