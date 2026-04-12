@@ -23,7 +23,7 @@ public class Enemy extends GameObject{
         this.sprites[0] = new Image("img/botnet.png");
         this.sprites[1] = new Image("img/malware0.png");
 		this.sprites[2] = new Image("img/crendentia0.png");
-        this.sprites[3] = new Image("img/botnet.png");
+        this.sprites[3] = new Image("img/botnet1.png");
         this.sprites[4] = new Image("img/malware1.png");
         this.sprites[5] = new Image("img/crendentia1.png");
         

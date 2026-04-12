@@ -444,7 +444,8 @@ public class GameIU extends Application {
                 root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
                 break;
             case 1:
-                root.setStyle("-fx-background-color: linear-gradient(to bottom right, #15042b, #1f1768, #38137e);");
+                root.setStyle("-fx-background-color: linear-gradient(to bottom right, #15042b, #611768, #7e134e);");
+                break;
             default:
                 root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");
                 break;
