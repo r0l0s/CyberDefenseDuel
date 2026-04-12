@@ -27,7 +27,6 @@ public class Enemy extends GameObject{
         this.sprites[4] = new Image("img/malware1.png");
         this.sprites[5] = new Image("img/crendentia1.png");
         
-        //Preventivo
         switch (type) {
             case 0:
                 this.colider.setFill(new ImagePattern(sprites[0]));
