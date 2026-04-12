@@ -12,11 +12,17 @@ public class ClientHandler implements Runnable {
     private DataOutputStream out;
     private String loggedInUser = null;
     private DatabaseManager dbManager;
+    private Server server;
 
     // Constructor gets the socket from the main Server loop and the shared DatabaseManager
-    public ClientHandler(Socket socket, DatabaseManager dbManager) {
+    public ClientHandler(Socket socket, DatabaseManager dbManager, Server server) {
         this.socket = socket;
         this.dbManager = dbManager;
+        this.server = server;
+    }
+
+    public String GetLoggedUser() {
+        return loggedInUser;
     }
 
     @Override
@@ -45,6 +51,11 @@ public class ClientHandler implements Runnable {
                         case "get_config":
                             handleInitialConfig();
                             break;
+
+                        case "update":
+                            handleUpdate(request);
+                            break;
+
                         default:
                             sendError("Unknown action");
                             break;
@@ -98,6 +109,23 @@ public class ClientHandler implements Runnable {
         out.writeUTF(dbManager.fetchConfigurationFile().toString());
     }
 
+    private void handleUpdate(JSONObject request){
+        int score = request.getInt("score");
+        int hp = request.getInt("hp");
+
+        JSONObject response = new JSONObject();
+        response.put("action", "updateOponent");
+        response.put("score", score);
+        response.put("hp", hp);
+        server.UpdateOponentData(loggedInUser, response);
+    }
+
+    public void handleOponentUpdate(JSONObject data) {
+        System.out.println("Sending oponent data");
+        sendData(data.toString());
+
+    }
+
     private void sendError(String message) throws IOException {
         JSONObject response = new JSONObject();
         response.put("status", "error");
@@ -113,6 +141,16 @@ public class ClientHandler implements Runnable {
             System.out.println("Client handler closed for: " + (loggedInUser != null ? loggedInUser : "Unknown"));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void sendData(String payload) {
+        try {
+            if (out != null) {
+                out.writeUTF(payload);
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to send: " + e.getMessage());
         }
     }
 }

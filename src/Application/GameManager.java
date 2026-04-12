@@ -17,6 +17,7 @@ public class GameManager {
 
         PlayerDataManager PDM = new PlayerDataManager();
         Mediator.SetPlayerDataManager(PDM);
+        System.out.println("From(GameManager: added PDM to Mediator)");
 
         Application.launch(GameIU.class, args);
     }

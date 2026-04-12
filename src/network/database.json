@@ -1,13 +1,37 @@
 [
     {
         "Score": 0,
-        "UserName": "user",
+        "UserName": "userA",
         "Password": "pass",
         "GamesPlayed": 0
     },
     {
         "Score": 0,
-        "UserName": "usa",
+        "UserName": "userB",
+        "Password": "pass",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Mario",
+        "Password": "pass",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Luigi",
+        "Password": "Pass",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "userL",
+        "Password": "pass",
+        "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "UserG",
         "Password": "pass",
         "GamesPlayed": 0
     }

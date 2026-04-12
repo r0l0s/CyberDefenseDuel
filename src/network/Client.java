@@ -78,6 +78,12 @@ public class Client {
                             handleInitialConfigurationResponse(response);
                             break;
 
+                        case "updateOponent":
+                            System.out.println("Updating oponent data");
+                            handleOponentUpdate(response);
+                            break;
+
+
                         default:
                             System.out.println("Received unknown message key " + key);
                     }
@@ -124,6 +130,11 @@ public class Client {
         //mediator.setConfiguration(response);
     }
 
+    private void handleOponentUpdate(JSONObject response){
+        mediator.UpdateOponentData(response);
+
+    }
+
     // ============================================================================
     // SENDERS (Main UI thread)
     // ============================================================================
@@ -155,6 +166,16 @@ public class Client {
         this.configCallback = onResult;
         JSONObject object = new JSONObject();
         object.put("action", "get_config");
+        sendData(object.toString());
+    }
+
+    public void SendPlayerData (String UserName, String Password, int CurrentScore, int CurrentHP) {
+        JSONObject object = new JSONObject();
+        object.put("action", "update");
+        object.put("userName", UserName);
+        object.put("password", Password);
+        object.put("score", CurrentScore);
+        object.put("hp", CurrentHP);
         sendData(object.toString());
     }
 

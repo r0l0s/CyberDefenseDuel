@@ -38,6 +38,12 @@ public class Mannager {
     private int score = 0;
     private int actual_level = 1;
 
+    // Oponente
+    private int OponentScore = 0;
+    private int OponentHP = 0;
+    private Label lbl_enemyLife;
+    private Label lbl_enemyScore;
+
     //Game loop man
     final AnimationTimer gameLoop;
     //Parámetros pasados por el config:
@@ -66,30 +72,37 @@ public class Mannager {
         player.get_colider().setFocusTraversable(true);
         Controller inputs = new Controller(root);
 
-        //Labels importantes para manejo de datos
+        // Datos del oponente ---------------------------------------------------------
         Label lbl_enemy = new Label("ENEMY:");
         lbl_enemy.setTextFill(Color.web("#8c00ff"));
         lbl_enemy.setFont(Font.font("Segoe UI", 20));
-        Label lbl_enemyLife = new Label("HP:");
+
+        lbl_enemyLife = new Label("HP: " + OponentHP);
         lbl_enemyLife.setTextFill(Color.web("#8c00ff"));
         lbl_enemyLife.setFont(Font.font("Segoe UI", 20));   
-        Label lbl_enemyScore = new Label("Score:");
+
+        lbl_enemyScore = new Label("Score:" + OponentScore);
         lbl_enemyScore.setTextFill(Color.web("#8c00ff"));
         lbl_enemyScore.setFont(Font.font("Segoe UI", 20));   
 
         HBox enemyLabels = new HBox(100, lbl_enemy, lbl_enemyLife,lbl_enemyScore);
         enemyLabels.setAlignment(Pos.TOP_LEFT);
         root.setTop(enemyLabels);
+        // -------------------------------------------------------------------------------
 
+        // Datos del jugador -------------------------------------------------------------
         Label lbl_playerHP = new Label("HP: "+player.getHealth());
         lbl_playerHP.setTextFill(Color.web("#ff0000"));
         lbl_playerHP.setFont(Font.font("Segoe UI", 20));
+
         Label lbl_score = new Label("Score: "+score);
         lbl_score.setTextFill(Color.web("#ff0000"));
         lbl_score.setFont(Font.font("Segoe UI", 20));
+        
         Label lbl_level = new Label("Level: "+actual_level);
         lbl_level.setTextFill(Color.web("#ff0000"));
-        lbl_level.setFont(Font.font("Segoe UI", 20));    
+        lbl_level.setFont(Font.font("Segoe UI", 20));
+        // -------------------------------------------------------------------------------
 
         HBox playerLabels = new HBox(450, lbl_playerHP, lbl_score,lbl_level);
         root.setBottom(playerLabels);
@@ -232,6 +245,10 @@ public class Mannager {
                         if (bullet.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
                             player.damage(bullet.get_damage());
                             lbl_playerHP.setText("HP: "+player.getHealth());
+
+                            Mediator.UpdatePlayerData(score, player.getHealth());
+                            System.out.println("Player received damage");
+
                             root.getChildren().remove(bullet.get_colider());
                             free_enemyBullets.push(bullet);
                             used_enemyBullets.delete(i);
@@ -319,6 +336,19 @@ public class Mannager {
 
         }
         
+    }
+
+    public void UpdateOponentData(JSONObject data) {
+        System.out.println("Updating Oponent data UI ");
+        OponentHP  = data.getInt("hp");
+        OponentScore = data.getInt("score");
+
+        javafx.application.Platform.runLater(() -> {
+            if (lbl_enemyLife != null && lbl_enemyScore != null) {
+                lbl_enemyLife.setText("HP: " + OponentHP);
+                lbl_enemyScore.setText("Score:" + OponentScore);
+            }
+        });
     }
 
     public void startLoop(){

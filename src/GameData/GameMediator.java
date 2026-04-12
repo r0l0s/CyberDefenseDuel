@@ -26,7 +26,7 @@ public class GameMediator {
         this.MaybePlayer = Optional.ofNullable(PlayerRef);
     }
     public void SetPlayerDataManager(PlayerDataManager PlayerDataManagerRef){
-        //this.MaybePlayerDataManager = Optional.ofNullable(PlayerDataManagerRef);
+        this.MaybePlayerDataManager = Optional.ofNullable(PlayerDataManagerRef);
     }
     public void SetClient(Client ClientRef){
         this.MaybeClient = Optional.ofNullable(ClientRef);
@@ -63,6 +63,24 @@ public class GameMediator {
     public void SetGameOver() {
         MaybeGameIU.ifPresent(
             GameIU -> GameIU.mostrarPantallaGameOver());
+    }
+
+    public void SendPlayerData(String UserName, String Password, int Score, int HP ) {
+        MaybeClient.ifPresent(Client -> Client.SendPlayerData(UserName, Password, Score, HP));
+    }
+
+    public void UpdateOponentData(JSONObject data) {
+        MaybeMannager.ifPresent(Mannager -> Mannager.UpdateOponentData(data));
+    }
+
+    // PlayerDataManager section ---------------------------------------------------------------------------------------
+    public void AddPlayerData(String UserName, String Password) {
+        System.out.println("From(Mediator) ran AddPlayerData");
+        MaybePlayerDataManager.ifPresent(PlayerDataManager -> PlayerDataManager.CreatePlayerProfile(UserName, Password));
+    }
+
+    public void UpdatePlayerData(int Score, int HP) {
+        MaybePlayerDataManager.ifPresent(PlayerDataManager -> PlayerDataManager.UpdateData(Score, HP));
     }
 
 

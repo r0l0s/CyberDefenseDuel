@@ -147,6 +147,7 @@ public class GameIU extends Application {
 
             Mediator.ClientLogin(UserName, Password, (isSuccess) -> {
                 // This runs only when the server replies to the mediator
+                Mediator.AddPlayerData(UserName, Password);
                 botonLogin.setText("Login");
                 botonLogin.setDisable(false);
                 if (isSuccess){
@@ -176,6 +177,7 @@ public class GameIU extends Application {
             botonRegistro.setDisable(true);
 
             Mediator.ClientRegister(UserName, Password, (isSuccess) -> {
+                Mediator.AddPlayerData(UserName, Password);
                 botonRegistro.setText("Register");
                 botonRegistro.setDisable(false);
 
