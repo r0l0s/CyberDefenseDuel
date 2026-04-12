@@ -78,7 +78,7 @@ public class ClientHandler implements Runnable {
 
         boolean success = dbManager.loginUser(user, pass);
         JSONObject response = new JSONObject();
-        response.put("action", "register");
+        response.put("action", "login");
         response.put("status", success ? "success" : "fail");
         response.put("message", success ? "Login Successful" : "Invalid Credentials");
 

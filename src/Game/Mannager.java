@@ -149,11 +149,13 @@ public class Mannager {
                 timerAcumulado += deltaTime;
                 tiempo2 += deltaTime;
                 
+                // Sending updates to the server every 50ms ------------------------------------
                 networkSyncTimer += deltaTime;
                 if (networkSyncTimer >= 0.5) {
                     networkSyncTimer = 0.0;
                     Mediator.UpdatePlayerData(score, player.getHealth());
                 }
+                // ------------------------------------------------------------------------------
 
                 // endregion
 

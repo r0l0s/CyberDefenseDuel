@@ -78,6 +78,23 @@ public class DatabaseManager {
         return true;
     }
 
+    // Fetching the player's Score and GamesPlayed
+    public synchronized JSONObject GetPlayerStats(String username) {
+        JSONObject stats = new JSONObject();
+
+        for (int i = 0; i < usersArray.length(); i++) {
+            JSONObject user = usersArray.getJSONObject(i);
+            if (user.getString("UserName").equals(username)) {
+                stats.put("Score", user.getInt("Score"));
+                stats.put("GamesPlayed", user.getInt("GamesPlayed"));
+            }
+        }
+        return stats;
+    }
+
+    // Seting the player's Score and GamesPlayed
+
+
     public synchronized JSONObject fetchConfigurationFile(){
         return configManager.getInitConfig();
     }
