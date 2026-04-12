@@ -9,9 +9,10 @@ public class Enemy extends GameObject{
     private double vel;
     private int dir;
     private int attack_type;
+    private int sprite_index;
 
     public Enemy(float x, float y, int type) {
-        super(75.0f,75.0f,3);
+        super(75.0f,75.0f,6);
         this.colider.setX(x);
 		this.colider.setY(y);
 		this.vel =  2;
@@ -20,21 +21,29 @@ public class Enemy extends GameObject{
 
         //Enemy sprites:
         this.sprites[0] = new Image("img/botnet.png");
-		this.sprites[1] = new Image("img/malware0.png");
-        this.sprites[2] = new Image("img/crendentia0.png");
+        this.sprites[1] = new Image("img/malware0.png");
+		this.sprites[2] = new Image("img/crendentia0.png");
+        this.sprites[3] = new Image("img/botnet.png");
+        this.sprites[4] = new Image("img/malware1.png");
+        this.sprites[5] = new Image("img/crendentia1.png");
+        
         //Preventivo
         switch (type) {
             case 0:
                 this.colider.setFill(new ImagePattern(sprites[0]));
+                sprite_index = 0;
                 break;
             case 1:
                 this.colider.setFill(new ImagePattern(sprites[1]));
+                sprite_index = 1;
                 break;
             case 2:
                 this.colider.setFill(new ImagePattern(sprites[2]));
+                sprite_index = 2;
                 break;
             default:
                 this.colider.setFill(new ImagePattern(sprites[0]));
+                sprite_index = 0;
                 break;
         }
     }
@@ -42,6 +51,14 @@ public class Enemy extends GameObject{
     //Getters and Setters section:
     public int getAttackType(){
         return this.attack_type;
+    }
+
+    public void change_sprite(){
+        sprite_index += 3;
+        if (sprite_index >= sprites.length){
+            sprite_index = sprite_index-6;
+        }
+        this.colider.setFill(new ImagePattern(sprites[sprite_index]));
     }
 
     //Change the position of the bullet on the X axis.

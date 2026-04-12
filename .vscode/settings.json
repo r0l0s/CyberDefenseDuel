@@ -3,14 +3,17 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "E:/workspace/projects/itcr/Java/javafx-sdk-26/lib/*.jar",
-        "E:/workspace/projects/itcr/Java/json.jar"
-    ],
-    "java.configuration.runtimes": [
-        {
-            "name": "JavaSE-26",
-            "path": "C:/Program Files/Java/jdk-26",
-            "default": true
-        }
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.base.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.controls.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.fxml.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.graphics.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.media.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.swing.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx.web.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\javafx-swt.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jdk.jsobject.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jfx.incubator.input.jar",
+        "c:\\Program Files\\javafx-sdk-25.0.2\\lib\\jfx.incubator.richtext.jar",
+        "c:\\Users\\USUARIO\\Documents\\Programación\\Java\\json.jar"
     ]
 }

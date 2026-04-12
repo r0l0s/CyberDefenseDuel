@@ -15,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.Node;
@@ -32,6 +33,8 @@ public class Mannager {
     private StackList<Bullet> free_enemyBullets;
     private DoubleEndedList<Bullet> used_enemyBullets;
     //private int[] damageByType = { 10, 20, 10 };
+    private double spawnrate;
+    private double attackspeed;
 
     // Jugador
     private Player player = Player.get_instance();
@@ -58,7 +61,7 @@ public class Mannager {
 
     private boolean isGameOver = false;
 
-    public Mannager(BorderPane root, GameMediator Mediator, JSONObject config) {
+    public Mannager(BorderPane root, GameMediator Mediator, JSONObject config,int player_index) { //level
 
         this.Mediator = Mediator;
         Mediator.SetMannager(this);
@@ -68,6 +71,7 @@ public class Mannager {
 
         // Agregamos los componentes al juego:
         player.setHeath(initialHP);
+        player.set_avatar(player_index);
         root.getChildren().add(player.get_colider());
         player.get_colider().setFocusTraversable(true);
         Controller inputs = new Controller(root);
@@ -181,6 +185,7 @@ public class Mannager {
                 for (int i = 0; i < enemyList.getSize(); i++) {
                     Enemy enemy = enemyList.get(i);
                     enemy.move();
+
                     double ULTIMATEX = enemy.get_colider().getTranslateX();
                     if (ULTIMATEX < -300 || ULTIMATEX > 50) {
                         enemy.changeDir();
@@ -252,6 +257,7 @@ public class Mannager {
                             root.getChildren().add(bullet.get_colider());
                         }
 
+                        bullet.setVelocity(attackspeed);
                         bullet.move();
 
                         // Intento uno de colisiones entre balas
@@ -279,10 +285,14 @@ public class Mannager {
                 }
 
                 // Cambiar nombre de variable
-                if (tiempo2 > 1.5) {
+                if (tiempo2 > (1/spawnrate)) {
                     // Comprobaciones de tiempo
-                    // System.out.println("Pasaron 3 segundos"+balaMala.getType());
                     tiempo2 = 0;
+                    //Animación del enemigo
+                    for (int i = 0; i < enemyList.getSize(); i++) {
+                        Enemy enemy = enemyList.get(i);
+                        enemy.change_sprite();
+                    }
                     // Sacar del stack a la lista
                     if (free_enemyBullets.getSize() != 0) {
                         Bullet bullet = free_enemyBullets.top();
@@ -314,8 +324,10 @@ public class Mannager {
                 // ------------------------------------------------------------------------------------------
 
                 if (score > difficultyStepScore){
-                    lbl_level.setText("Level: "+ ++actual_level);
-                    difficultyStepScore *= 2;
+                    actual_level = score/difficultyStepScore;
+                    lbl_level.setText("Level: "+ actual_level);
+                    attackspeed =  baseAttackSpeed + speedAddPerLevel*actual_level;
+                    spawnrate =  baseSpawnRate * (Math.pow(spawnMultiplierPerLevel,actual_level));
                     //Agregar el cambio de dificultad como subir spawnrate y daño
                 }
             }
@@ -345,6 +357,8 @@ public class Mannager {
             spawnMultiplierPerLevel = Configuration.getDouble("spawnMultiplierPerLevel");
             speedAddPerLevel = Configuration.getDouble("speedAddPerLevel");
             damageByType = new int[]{ 10, 20, 10 };
+            attackspeed = baseAttackSpeed;
+            spawnrate = baseSpawnRate;
 
         } catch(Exception e ){
             System.out.println("Error in configuration file");

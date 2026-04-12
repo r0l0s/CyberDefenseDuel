@@ -46,5 +46,11 @@
         "UserName": "Marcos2",
         "Password": "pass",
         "GamesPlayed": 0
+    },
+    {
+        "Score": 0,
+        "UserName": "Marcos3",
+        "Password": "pass",
+        "GamesPlayed": 0
     }
 ]

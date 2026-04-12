@@ -47,6 +47,9 @@ public class Bullet extends GameObject{
 		get_colider().setFill(new ImagePattern(sprites[type]));
 	}
 
+	public void setVelocity(double vel){
+		this.vel = (int) vel;;
+	}
 
 	//Change the position of the bullet on the Y axis.
 	public void move() {
