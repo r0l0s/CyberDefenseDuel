@@ -130,6 +130,8 @@ public class Mannager {
             private double tiempo2 = 0;
             int enemy_count = 0;
 
+            private double networkSyncTimer = 0.0;
+
             @Override
             public void handle(long now) {
                 // 1. Capturar Input (Teclas, ratón)
@@ -146,6 +148,13 @@ public class Mannager {
                 lastTime = now;
                 timerAcumulado += deltaTime;
                 tiempo2 += deltaTime;
+                
+                networkSyncTimer += deltaTime;
+                if (networkSyncTimer >= 0.5) {
+                    networkSyncTimer = 0.0;
+                    Mediator.UpdatePlayerData(score, player.getHealth());
+                }
+
                 // endregion
 
                 // Inputs:
@@ -201,6 +210,9 @@ public class Mannager {
                         // if
                         // (bullet.get_colider().getBoundsInParent().intersects(balaMala.get_colider().getBoundsInParent()))
                         // {
+
+
+                        // PLAYER SCORE TRACKER ------------------------------------------------------------------
                         if (obj != null) {
                             Bullet enemyBullet = (Bullet) obj.getUserData();
                             if (bullet.getType() == enemyBullet.getType()) {
@@ -215,6 +227,7 @@ public class Mannager {
                             player.free_bullets.push(bullet);
                             player.get_usedBullets().delete(i);
                         }
+                        // ----------------------------------------------------------------------------------------
 
                         if (bullet.get_colider().getTranslateY() < -350) {
                             root.getChildren().remove(bullet.get_colider());
@@ -242,17 +255,20 @@ public class Mannager {
                         bullet.move();
 
                         // Intento uno de colisiones entre balas
+                        
+                        // -- PLAYER HIT DETECTION -------------------------------------------------------------------------
                         if (bullet.get_colider().getBoundsInParent().intersects(player.get_colider().getBoundsInParent())) {
                             player.damage(bullet.get_damage());
                             lbl_playerHP.setText("HP: "+player.getHealth());
 
-                            Mediator.UpdatePlayerData(score, player.getHealth());
+                            //Mediator.UpdatePlayerData(score, player.getHealth());
                             System.out.println("Player received damage");
 
                             root.getChildren().remove(bullet.get_colider());
                             free_enemyBullets.push(bullet);
                             used_enemyBullets.delete(i);
                         }
+                        // ---------------------------------------------------------------------------------------------------
 
                         if (bullet.get_colider().getTranslateY() > 700) {
                             root.getChildren().remove(bullet.get_colider());

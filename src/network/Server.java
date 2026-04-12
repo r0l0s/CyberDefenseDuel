@@ -45,11 +45,10 @@ public class Server {
 
     public void UpdateOponentData(String LoggedUser, JSONObject Data) {
         for (int i = 0; i < 2; i++) {
-            if (LoggedUser != Clients[i].GetLoggedUser()) {
+            if (!LoggedUser.equals(Clients[i].GetLoggedUser())) {
                 Clients[i].handleOponentUpdate(Data);
-            } else {
-                return;
-            }
+            } 
+
         }
     }
 
