@@ -34,8 +34,7 @@ public class Player extends GameObject{
 		this.colider.setY(y);
 		this.y = y;
 		this.vel =  4;
-		//Misc
-		this.health = 100;
+
 		//Creating the available bullets.
 		this.free_bullets = new StackList<Bullet>(new Bullet(this.x,this.y,-1));
 		for(int i=0;i<9;i++) {
@@ -68,7 +67,7 @@ public class Player extends GameObject{
 		return this.health;
 	}
 	
-	public void setHeath(int hp){
+	public void setHealth(int hp){
 		this.health = hp;
 	}
 
