@@ -63,6 +63,8 @@ public class GameMediator {
     public void SetGameOver() {
         MaybeGameIU.ifPresent(
             GameIU -> GameIU.mostrarPantallaGameOver());
+
+        MaybePlayerDataManager.ifPresent(PlayerDataManager -> {PlayerDataManager.IncreaseGamesPlayedCount(); PlayerDataManager.SendEndGameStats();});
     }
 
     public void SendPlayerData(String UserName, String Password, int Score, int HP ) {
@@ -73,6 +75,11 @@ public class GameMediator {
         MaybeMannager.ifPresent(Mannager -> Mannager.UpdateOponentData(data));
     }
 
+
+    public void GetPlayerStats() {
+        MaybeClient.ifPresent(Client -> Client.RequestPlayerStats());
+    }
+
     // PlayerDataManager section ---------------------------------------------------------------------------------------
     public void AddPlayerData(String UserName, String Password) {
         System.out.println("From(Mediator) ran AddPlayerData");
@@ -81,6 +88,14 @@ public class GameMediator {
 
     public void UpdatePlayerData(int Score, int HP) {
         MaybePlayerDataManager.ifPresent(PlayerDataManager -> PlayerDataManager.UpdateData(Score, HP));
+    }
+
+    public void ProcessPlayerStats(JSONObject playerStats) {
+        MaybePlayerDataManager.ifPresent(PlayerDataManager -> PlayerDataManager.AcquirePlayerStats(playerStats));
+    }
+
+    public void SendEndGameStats(JSONObject finalStats) {
+        MaybeClient.ifPresent(Client -> Client.SendEndGameStats(finalStats));
     }
 
 

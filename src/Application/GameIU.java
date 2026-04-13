@@ -202,6 +202,10 @@ public class GameIU extends Application {
 
     // 2) Pantalla de seleccion del avatar.
     private void mostrarPantallaAvatar() {
+
+        Mediator.GetPlayerStats();
+        System.out.println("Requested Player Stats");
+
         // Mismo estilo visual para mantener consistencia y se vea todo parejo.
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47);");

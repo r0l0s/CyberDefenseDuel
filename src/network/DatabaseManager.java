@@ -85,14 +85,30 @@ public class DatabaseManager {
         for (int i = 0; i < usersArray.length(); i++) {
             JSONObject user = usersArray.getJSONObject(i);
             if (user.getString("UserName").equals(username)) {
+                System.out.println("Found User!!!");
                 stats.put("Score", user.getInt("Score"));
                 stats.put("GamesPlayed", user.getInt("GamesPlayed"));
+                stats.put("action", "stats");
             }
         }
+
         return stats;
     }
 
     // Seting the player's Score and GamesPlayed
+    public synchronized void SetPlayerStats(int score, int gamesPlayed, String username) {
+        for (int i = 0; i < usersArray.length(); i++) {
+            JSONObject user = usersArray.getJSONObject(i);
+            if (user.getString("UserName").equals(username)) {
+                user.put("Score", score);
+                user.put("GamesPlayed", gamesPlayed);
+
+                saveDatabase();
+                System.out.println("Saved " + username + " stats successfully!!!");
+                break;
+            }
+        }
+    }
 
 
     public synchronized JSONObject fetchConfigurationFile(){

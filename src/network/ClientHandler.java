@@ -56,6 +56,15 @@ public class ClientHandler implements Runnable {
                             handleUpdate(request);
                             break;
 
+                        case "get_stats":
+                            System.out.println("Fetching player stats....");
+                            sendUserStats();
+                            break;
+
+                        case "set_stats":
+                            setUserStats(request);
+                            break;
+
                         default:
                             sendError("Unknown action");
                             break;
@@ -102,6 +111,19 @@ public class ClientHandler implements Runnable {
             loggedInUser = user;
         }
         out.writeUTF(response.toString());
+
+    }
+
+    private void sendUserStats(){
+        JSONObject stats = dbManager.GetPlayerStats(loggedInUser);
+        sendData(stats.toString());;
+    }
+
+    private void setUserStats(JSONObject request) {
+        int FinalPlayerScore = request.getInt("Score");
+        int TotalGamesPlayed = request.getInt("GamesPlayed");
+        String UserName = loggedInUser;
+        dbManager.SetPlayerStats(FinalPlayerScore, TotalGamesPlayed, UserName);
     }
 
     private void handleInitialConfig() throws IOException {

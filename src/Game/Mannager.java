@@ -157,11 +157,6 @@ public class Mannager {
                     networkSyncTimer = 0.0;
                     Mediator.UpdatePlayerData(score, player.getHealth());
                 }
-<<<<<<< HEAD
-                // ------------------------------------------------------------------------------
-
-=======
->>>>>>> 9e51c7a60ef6fa594b315ddee961759eba3769db
                 // endregion
 
                 //region Inputs:

@@ -83,6 +83,11 @@ public class Client {
                             handleOponentUpdate(response);
                             break;
 
+                        case "stats":
+                            System.out.println("Received User Stats");
+                            handlePlayerStats(response);
+                            break;
+
 
                         default:
                             System.out.println("Received unknown message key " + key);
@@ -187,6 +192,20 @@ public class Client {
         } catch (IOException e) {
             System.out.println("Failed to send: " + e.getMessage());
         }
+    }
+
+    public void SendEndGameStats(JSONObject finalStats) {
+        sendData(finalStats.toString());
+    }
+
+    public void RequestPlayerStats() {
+        JSONObject request = new JSONObject();
+        request.put("action", "get_stats");
+        sendData(request.toString());
+    }
+
+    private void handlePlayerStats(JSONObject response) {
+        mediator.ProcessPlayerStats(response);
     }
 
     public void closeConnection() {
