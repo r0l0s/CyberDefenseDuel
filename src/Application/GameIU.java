@@ -428,16 +428,35 @@ public class GameIU extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #0a1022, #0f1a36, #111f47)");
 
-        Label loadingLabel = new Label("GAME OVER");
-        loadingLabel.setTextFill(Color.web("#f8fafc"));
-        loadingLabel.setFont(Font.font("Segoe UI", 32));
+        Label gameOverLabel = new Label("GAME OVER");
+        gameOverLabel.setTextFill(Color.web("#f8fafc"));
+        gameOverLabel.setFont(Font.font("Segoe UI", 32));
 
-        VBox centerBox = new VBox(loadingLabel);
+        Label WaitingLabel = new Label("Esperando Jugador...");
+        WaitingLabel.setTextFill(Color.web("#f8fafc"));
+        WaitingLabel.setFont(Font.font("Segoe UI", 25));
+
+        VBox centerBox = new VBox(gameOverLabel);
         centerBox.setAlignment(Pos.CENTER);
         root.setCenter(centerBox);
 
+        VBox waitingBox = new VBox(WaitingLabel);
+        waitingBox.setAlignment(Pos.BOTTOM_CENTER);
+        root.setBottom(waitingBox);
+
         Scene escena = new Scene(root, 1200, 760);
         ventana.setScene(escena);
+
+        Mediator.AwaitEnd((isWin -> {
+            if (isWin) {
+                WaitingLabel.setText("GANADOR");
+            }
+
+            else {
+                WaitingLabel.setText("PERDEDOR");
+            }
+
+        }));
     }
 
     // 4) Pantalla de juego.

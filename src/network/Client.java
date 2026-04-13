@@ -19,6 +19,7 @@ public class Client {
     private Consumer<Boolean> loginCallback;
     private Consumer<Boolean> registerCallback;
     private Consumer<JSONObject> configCallback;
+    private Consumer<Boolean> OponentEndCallback;
 
     // Mediator
     private GameMediator mediator;
@@ -88,6 +89,10 @@ public class Client {
                             handlePlayerStats(response);
                             break;
 
+                        case "finalResult":
+                            handleFinalResponse(response);
+                            break;
+
 
                         default:
                             System.out.println("Received unknown message key " + key);
@@ -111,6 +116,16 @@ public class Client {
             Consumer<Boolean> callbackToRun = this.loginCallback;
             this.loginCallback = null;
             Platform.runLater(() -> callbackToRun.accept(isSuccess));
+        }
+    }
+
+    private void handleFinalResponse(JSONObject response) {
+        boolean isWin = response.getBoolean("result");
+        System.out.println("Got the end result: " + isWin);
+        if (OponentEndCallback != null) {
+            Consumer<Boolean> callbackToRun = this.OponentEndCallback;
+            this.OponentEndCallback = null;
+            Platform.runLater(() -> callbackToRun.accept(isWin));
         }
     }
 
@@ -167,6 +182,13 @@ public class Client {
         sendData(object.toString());
     }
 
+    public void SignalGameEnd(Consumer<Boolean> onResult) {
+        this.OponentEndCallback = onResult;
+
+        JSONObject object = new JSONObject();
+        object.put("action", "end");
+    }
+
     public void getConfiguration(Consumer<JSONObject> onResult){
         this.configCallback = onResult;
         JSONObject object = new JSONObject();
@@ -174,13 +196,14 @@ public class Client {
         sendData(object.toString());
     }
 
-    public void SendPlayerData (String UserName, String Password, int CurrentScore, int CurrentHP) {
+    public void SendPlayerData (String UserName, String Password, int CurrentScore, int CurrentHP, String PlayerState) {
         JSONObject object = new JSONObject();
         object.put("action", "update");
         object.put("userName", UserName);
         object.put("password", Password);
         object.put("score", CurrentScore);
         object.put("hp", CurrentHP);
+        object.put("PlayerState", PlayerState);
         sendData(object.toString());
     }
 

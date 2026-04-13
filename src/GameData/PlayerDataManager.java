@@ -13,10 +13,11 @@ public class PlayerDataManager {
     private String UserPassword;
     private GameMediator Mediator;
 
+    private String PlayerState = "Active";
     private int PlayerScore = 0;
     private int GamesPlayed = 0;
-
     private int CurrentHP = 100;
+
 
     public PlayerDataManager(){
         Mediator = GameManager.getMediator();
@@ -36,9 +37,11 @@ public class PlayerDataManager {
     }
 
     public void SendEndGameStats() {
+        PlayerState = "END";
         JSONObject finalStats = new JSONObject();
         finalStats.put("Score", PlayerScore);
         finalStats.put("GamesPlayed", GamesPlayed);
+        finalStats.put("PlayerState", PlayerState);
         finalStats.put("action", "set_stats");
         System.out.println("Sending End Game stats to the server...");
         Mediator.SendEndGameStats(finalStats);
@@ -54,7 +57,7 @@ public class PlayerDataManager {
         PlayerScore = newScore;
         CurrentHP = newHP;
         System.out.println("From(PlayerDataManager: Sending player data)");
-        Mediator.SendPlayerData(UserName, UserPassword, PlayerScore, CurrentHP);
+        Mediator.SendPlayerData(UserName, UserPassword, PlayerScore, CurrentHP, PlayerState);
     }
 
 

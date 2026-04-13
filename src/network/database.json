@@ -3,12 +3,12 @@
         "Score": 0,
         "UserName": "luigi",
         "Password": "pass",
-        "GamesPlayed": 1
+        "GamesPlayed": 4
     },
     {
-        "Score": 70,
+        "Score": 50,
         "UserName": "mario",
         "Password": "pass",
-        "GamesPlayed": 1
+        "GamesPlayed": 4
     }
 ]

@@ -53,4 +53,29 @@ public class Server {
     }
 
 
+    public void SignalPlayerEnd() {
+        int PlayersOnGameOver = 0;
+        for (int i = 0; i < 2; i++) {
+            if (Clients[i].GetPlayerSte().equals("END")) {
+                PlayersOnGameOver += 1;
+            }
+        }
+
+        if (PlayersOnGameOver == 2) {
+            int PlayerAScore = Clients[0].GetFinalScore();
+            int PlayerBScore = Clients[1].GetFinalScore();
+
+            if (PlayerAScore > PlayerBScore) {
+                Clients[0].sendFinalResult(true);
+                Clients[1].sendFinalResult(false);
+            }
+
+            else {
+                Clients[1].sendFinalResult(true);
+                Clients[0].sendFinalResult(false);
+            }
+        }
+    }
+
+
 }

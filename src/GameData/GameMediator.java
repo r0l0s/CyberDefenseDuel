@@ -67,8 +67,8 @@ public class GameMediator {
         MaybePlayerDataManager.ifPresent(PlayerDataManager -> {PlayerDataManager.IncreaseGamesPlayedCount(); PlayerDataManager.SendEndGameStats();});
     }
 
-    public void SendPlayerData(String UserName, String Password, int Score, int HP ) {
-        MaybeClient.ifPresent(Client -> Client.SendPlayerData(UserName, Password, Score, HP));
+    public void SendPlayerData(String UserName, String Password, int Score, int HP, String PlayerState ) {
+        MaybeClient.ifPresent(Client -> Client.SendPlayerData(UserName, Password, Score, HP, PlayerState));
     }
 
     public void UpdateOponentData(JSONObject data) {
@@ -97,6 +97,13 @@ public class GameMediator {
     public void SendEndGameStats(JSONObject finalStats) {
         MaybeClient.ifPresent(Client -> Client.SendEndGameStats(finalStats));
     }
+
+
+
+    public void AwaitEnd(Consumer<Boolean> onResult) {
+        MaybeClient.ifPresent(Client -> Client.SignalGameEnd(onResult));
+    }
+
 
 
 }
